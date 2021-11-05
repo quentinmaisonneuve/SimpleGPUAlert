@@ -31,6 +31,11 @@ public class Main {
     // Properties of the program
     public static Properties properties;
 
+    // TODO :
+    //  Run thread for the daemon only and try catch all exception to secure his execution
+    //  Optional :
+    //      Expose API REST with last data
+
     public static void main(String[] args) throws IOException {
 
         properties = PropertyManager.loadPropertiesFromFile("src/main/resources/configuration.properties");
