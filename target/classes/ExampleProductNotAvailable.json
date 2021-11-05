@@ -1,0 +1,18 @@
+[
+  {
+    "productId": 33825,
+    "productTitle": "NVIDIA GEFORCE RTX 3060 Ti",
+    "logoUrl": "https://media.ldlc.com/cms/2020-11/logo-site-noel-2.png",
+    "isAvailable": true,
+    "salePrice": "419.00",
+    "hasOffer": false,
+    "offerText": null,
+    "partnerId": "45",
+    "storeId": "45",
+    "upc": "NVGFT060T_FR",
+    "sku": "NVGFT060T",
+    "stock": 0,
+    "retailerName": "https://www.ldlc.com",
+    "type": 80
+  }
+]

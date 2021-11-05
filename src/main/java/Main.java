@@ -8,8 +8,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -34,9 +40,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        properties = PropertiesManager.loadPropertiesFromFile("src/main/resources/configuration.properties");
+
         System.setProperty("webdriver.gecko.driver", getGeckoDriverPath());
         WebDriver driver = new FirefoxDriver();
-        properties = PropertiesManager.loadPropertiesFromFile("src/main/resources/configuration.properties");
 
         try {
 
@@ -58,6 +65,7 @@ public class Main {
                     if(purchaseLink != null) {
 
                         sendEmailNotification(gpu, purchaseLink);
+                        sendTelegramNotification(gpu, purchaseLink, new Locale("FR"));
                     }
                 }
             }
@@ -120,7 +128,28 @@ public class Main {
 
         } catch (Exception e) {
 
-            System.out.println(e.getCause());
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendTelegramNotification(GPU gpu, String purchaseLink, Locale locale) {
+
+        String urlString = properties.getProperty("TELEGRAM_API_LINK");
+        String message = "Nvidia " + locale.toString().toUpperCase() +
+                "%0AFE Nvidia GeForce RTX " + gpu.toString() +
+                "%0A" + purchaseLink;
+
+        urlString = String.format(urlString, properties.getProperty("API_TOKEN"), properties.getProperty("CHAT_ID"), message);
+
+        try {
+
+            URL url = new URL(urlString);
+            URLConnection conn = url.openConnection();
+            InputStream is = new BufferedInputStream(conn.getInputStream());
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
         }
     }
 
@@ -130,40 +159,43 @@ public class Main {
      */
     private static String getGeckoDriverPath() {
 
-        StringBuilder pathToGeckoDriver = new StringBuilder(GECKODRIVER_BASE_PATH);
+        String path = null;
+        StringBuilder pathBuilder = new StringBuilder(GECKODRIVER_BASE_PATH);
 
         boolean arch64 = System.getProperty(OS_ARCH).contains(ARCH64);
 
         if(System.getProperty(OS_NAME).toLowerCase().contains(WINDOWS)) {
 
-            pathToGeckoDriver.append(WINDOWS);
+            pathBuilder.append(WINDOWS);
 
         } else if(System.getProperty(OS_NAME).toLowerCase().contains(MAC_OS)) {
 
-            pathToGeckoDriver.append(MAC_OS);
+            pathBuilder.append(MAC_OS);
 
         } else if(System.getProperty(OS_NAME).toLowerCase().contains(LINUX)) {
 
-            pathToGeckoDriver.append(LINUX);
+            pathBuilder.append(LINUX);
 
         } else {
 
-            pathToGeckoDriver = null;
+            pathBuilder = null;
         }
 
-        if(pathToGeckoDriver != null) {
+        if(pathBuilder != null) {
 
             if(arch64) {
 
-                pathToGeckoDriver.append(ARCH64);
+                pathBuilder.append(ARCH64);
 
             } else {
 
-                pathToGeckoDriver.append(ARCH32);
+                pathBuilder.append(ARCH32);
             }
+
+            path = pathBuilder.toString();
         }
 
-        return Objects.requireNonNullElse(pathToGeckoDriver.toString(), null);
+        return path;
     }
 
     /**
