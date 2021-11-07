@@ -1,21 +1,15 @@
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import jakarta.mail.Authenticator;
@@ -28,15 +22,22 @@ import jakarta.mail.internet.MimeMessage;
 
 public class Main {
 
+    private static long lastStartRequest;
+    private static long lastEndRequest;
+
     // Properties of the program
     public static Properties properties;
 
     // TODO :
     //  Run thread for the daemon only and try catch all exception to secure his execution
+    //  Service class for each functionality
+    //  Asynchronous call for notification
+    //  Get the response from telegram notification message
+    //  .
     //  Optional :
     //      Expose API REST with last data
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         properties = PropertyManager.loadPropertiesFromFile("src/main/resources/configuration.properties");
 
@@ -44,9 +45,18 @@ public class Main {
 
             while(true) {
 
-                Thread.sleep(Long.parseLong(properties.getProperty("REFRESH_INTERVAL")));
+                Calendar now = Calendar.getInstance();
+                System.out.println(now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE) + ":" + now.get(Calendar.SECOND));
+
+                System.out.println(lastEndRequest - lastStartRequest);
+
+                Thread.sleep(Long.parseLong(properties.getProperty("REFRESH_INTERVAL"))-(lastEndRequest - lastStartRequest));
+
+                // Begin of process
+                lastStartRequest = System.currentTimeMillis();
 
                 List<GPUName> gpuToFind = Arrays.asList(GPUName._3060ti, GPUName._3080);
+
                 List<GPUInfo> gpuInfos = getListInfoGPU(new Locale(properties.getProperty("LOCALE")));
 
                 for (GPUInfo gpuInfo : gpuInfos) {
@@ -59,6 +69,9 @@ public class Main {
                         sendTelegramNotification(gpuInfo, new Locale(properties.getProperty("LOCALE")));
                     }
                 }
+
+                // End of process
+                lastEndRequest = System.currentTimeMillis();
             }
 
         } catch (InterruptedException e) {
@@ -68,7 +81,7 @@ public class Main {
         }
     }
 
-    private static List<GPUInfo> getListInfoGPU(Locale locale) throws IOException {
+    private static List<GPUInfo> getListInfoGPU(Locale locale) throws InterruptedException {
 
         List<GPUInfo> gpuInfos = new ArrayList<>();
 
@@ -105,25 +118,33 @@ public class Main {
         return gpuInfos;
     }
 
-    private static String readAll(Reader rd) throws IOException {
+    public static JSONObject readJsonFromUrl(String url)  {
 
-        StringBuilder sb = new StringBuilder();
-        int cp;
+        JSONObject json = null;
 
-        while ((cp = rd.read()) != -1) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
 
-            sb.append((char) cp);
+        HttpResponse<String> response = null;
+
+        try {
+
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        } catch (IOException | InterruptedException e) {
+
+            e.printStackTrace();
         }
 
-        return sb.toString();
-    }
+        if (response != null) {
 
-    public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-
-        try (InputStream is = new URL(url).openStream()) {
-
-            return new JSONObject(readAll(new BufferedReader(new InputStreamReader(is))));
+            json = new JSONObject(response.body());
         }
+
+        return json;
     }
 
     /**
