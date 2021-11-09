@@ -1,9 +1,9 @@
 import java.util.*;
 
-import Services.GPU.GPUInfo;
-import Services.GPU.GPUName;
-import Services.GPU.GPUInfoService;
-import Services.NotificationService;
+import Data.GPUInfo;
+import Data.GPUName;
+import Service.GPUInfoService;
+import Service.NotificationService;
 
 public class Main {
 

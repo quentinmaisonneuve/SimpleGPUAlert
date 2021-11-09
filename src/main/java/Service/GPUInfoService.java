@@ -1,4 +1,4 @@
-package Services.GPU;
+package Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,6 +14,9 @@ import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import Data.GPUInfo;
+import Data.GPUName;
 
 /**
  * Manage the different type of notification the program can send
@@ -63,8 +66,8 @@ public class GPUInfoService extends Service {
     }
 
     /**
-     * Return the class name of the div who contains supply information of the gpu by giving the Services.GPU name
-     * @param gpu Nvidia FE Services.GPU
+     * Return the class name of the div who contains supply information of the gpu by giving the Data.GPU name
+     * @param gpu Nvidia FE Data.GPU
      * @return Div class of supply information, example : NVGFT060T if for an 3060ti
      */
     public static String getClassDivGPU(GPUName gpu) {

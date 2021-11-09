@@ -1,4 +1,4 @@
-package Services.GPU;
+package Service;
 
 import java.util.Properties;
 

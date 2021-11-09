@@ -1,4 +1,4 @@
-package Services;
+package Service;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -8,9 +8,8 @@ import java.net.URLConnection;
 import java.util.Locale;
 import java.util.Properties;
 
-import Services.GPU.GPUInfo;
-import Services.GPU.GPUName;
-import Services.GPU.Service;
+import Data.GPUInfo;
+import Data.GPUName;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
@@ -35,7 +34,7 @@ public class NotificationService extends Service {
      *  Two Steps Verification should be turned off.
      *  Allow Less Secure App(should be turned on) : https://myaccount.google.com/lesssecureapps
      *  Try this link if it still doesn't work : https://accounts.google.com/DisplayUnlockCaptcha
-     * @param gpu Nvidia Services.GPU
+     * @param gpu Nvidia Data.GPU
      * @param purchaseLink Purchase link
      */
     public void sendEmailNotification(GPUName gpu, String purchaseLink) {
@@ -83,7 +82,7 @@ public class NotificationService extends Service {
 
     /**
      * Send telegram notification
-     * @param gpuInfo Nvidia Services.GPU informations
+     * @param gpuInfo Nvidia Data.GPU informations
      */
     public void sendTelegramNotification(GPUInfo gpuInfo) {
 
