@@ -1,3 +1,5 @@
+package Services.GPU;
+
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,9 @@
+package Services.GPU;
+
 import org.apache.maven.shared.utils.StringUtils;
 
 /**
- * List of all Nvidia FE GPU available
+ * List of all Nvidia FE Services.GPU available
  */
 public enum GPUName {
 
@@ -13,9 +15,9 @@ public enum GPUName {
     _3090;
 
     /**
-     * Convert a string name of GPU to an enum GPU
-     * @param gpuName Name of GPU
-     * @return Enum of corresponding GPU
+     * Convert a string name of Services.GPU to an enum Services.GPU
+     * @param gpuName Name of Services.GPU
+     * @return Enum of corresponding Services.GPU
      */
     public static GPUName StringToGPU(String gpuName) {
 
