@@ -1,4 +1,4 @@
-package Data;
+package data;
 
 import org.apache.maven.shared.utils.StringUtils;
 

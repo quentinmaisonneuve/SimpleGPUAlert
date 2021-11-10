@@ -1,3 +1,5 @@
+package service;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +12,10 @@ import org.apache.maven.shared.utils.StringUtils;
  */
 public class PropertyManager {
 
+    // Properties object
+    public static Properties properties;
+
+    // Constants
     public static final String INCORRECT_PROPERTY_FILE = "Properties file is not correctly formatted or file doesn't exist. You can either put it in the executable's folder with the name '%s' or pass the path in argument.";
     public static final String NAME_PROPERTY_FILE = "configuration.properties";
 
@@ -38,11 +44,8 @@ public class PropertyManager {
     /**
      * Load properties from either path from args or from configuration.properties file if exist
      * @param args Argmuments of the main program
-     * @return properties if reading file exist and is correct
      */
-    public static Properties loadProperties(String[] args) {
-
-        Properties properties = null;
+    public static void loadProperties(String[] args) {
 
         // Try with the args
         if (args.length > 0 && StringUtils.isNotBlank(args[0])) {
@@ -61,7 +64,5 @@ public class PropertyManager {
 
             System.out.println(String.format(INCORRECT_PROPERTY_FILE, NAME_PROPERTY_FILE));
         }
-
-        return properties;
     }
 }

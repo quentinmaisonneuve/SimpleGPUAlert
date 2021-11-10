@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,25 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Data.GPUInfo;
-import Data.GPUName;
+import data.GPUInfo;
+import data.GPUName;
 
 /**
  * Manage the different type of notification the program can send
  */
-public class GPUInfoService extends Service {
+public class GPUInfoService {
 
 
-    public GPUInfoService(Properties properties) {
-        super(properties);
-    }
-
-    public List<GPUInfo> getListInfoGPU(Locale locale) throws InterruptedException {
+    public List<GPUInfo> getListInfoGPU(Locale locale) {
 
         List<GPUInfo> gpuInfos = new ArrayList<>();
 
@@ -39,7 +34,7 @@ public class GPUInfoService extends Service {
             GPUNameToId.put(GPUInfoService.getClassDivGPU(gpuName), gpuName);
         }
 
-        JSONArray lineProducts = readJsonFromUrl(String.format(getProperties().getProperty("NVIDIA_API_LINK"),
+        JSONArray lineProducts = readJsonFromUrl(String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
                 locale.toString().toUpperCase(),
                 locale.toString().toUpperCase()))
                 .getJSONArray("listMap");
