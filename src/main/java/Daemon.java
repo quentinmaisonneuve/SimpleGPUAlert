@@ -52,7 +52,7 @@ public class Daemon implements Runnable {
                         System.out.println(gpuInfo.getGpuName());
                         for (NotificationService notificationService : notificationServices) {
 
-                            notificationService.sendNotification(gpuInfo);
+                            new Thread(() -> notificationService.sendNotification(gpuInfo)).start();
                         }
                     }
                 }

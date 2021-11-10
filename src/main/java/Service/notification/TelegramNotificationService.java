@@ -22,6 +22,7 @@ public class TelegramNotificationService implements NotificationService {
      * Send telegram notification
      * @param gpuInfo Nvidia GPU informations
      */
+    @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
         String urlString = PropertyManager.properties.getProperty(TELEGRAM_API_LINK);
