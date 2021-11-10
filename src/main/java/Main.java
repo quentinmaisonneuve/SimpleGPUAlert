@@ -3,7 +3,8 @@ import service.PropertyManager;
 public class Main {
 
     // TODO :
-    //  Make desktop notification for windows, linux and macos
+    //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
+    //  Add a title template and a message template
     //  Get the response from telegram notification message
     //  Limit the number of telegram notification for one second
     //  Optional :
