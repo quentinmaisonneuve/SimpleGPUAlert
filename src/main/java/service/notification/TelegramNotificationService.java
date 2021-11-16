@@ -13,10 +13,10 @@ import service.PropertyManager;
 public class TelegramNotificationService implements NotificationService {
 
     public static final String TELEGRAM_API_LINK = "TELEGRAM_API_LINK";
-    public static final String LOCALE = "LOCALE";
     public static final String API_TOKEN = "API_TOKEN";
     public static final String CHAT_ID = "CHAT_ID";
     public static final String MAX_MESSAGE_PER_SECOND = "MAX_MESSAGE_PER_SECOND";
+    public static final String TELEGRAM_MESSAGE_TEMPLATE = "TELEGRAM_MESSAGE_TEMPLATE";
 
     /**
      * Send telegram notification
@@ -25,12 +25,16 @@ public class TelegramNotificationService implements NotificationService {
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
-        String urlString = PropertyManager.properties.getProperty(TELEGRAM_API_LINK);
-        String message = "Nvidia " + new Locale(PropertyManager.properties.getProperty(LOCALE)).toString().toUpperCase() +
-                "%0AFE Nvidia GeForce RTX " + gpuInfo.getGpuName() +
-                "%0A" + gpuInfo.getProductUrl();
+        String urlString;
 
-        urlString = String.format(urlString, PropertyManager.properties.getProperty(API_TOKEN), PropertyManager.properties.getProperty(CHAT_ID), message);
+        String message = String.format(PropertyManager.properties.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
+                new Locale(PropertyManager.properties.getProperty(LOCALE).toUpperCase()),
+                gpuInfo.getGpuName(),
+                gpuInfo.getProductUrl());
+
+        urlString = String.format(PropertyManager.properties.getProperty(TELEGRAM_API_LINK),
+                PropertyManager.properties.getProperty(API_TOKEN),
+                PropertyManager.properties.getProperty(CHAT_ID), message);
 
         try {
 

@@ -7,6 +7,8 @@ import data.GPUInfo;
  */
 public interface NotificationService {
 
+    String LOCALE = "LOCALE";
+
     /**
      * Send notification on the channel implemented
      * @param gpuInfo Nvidia GPU informations

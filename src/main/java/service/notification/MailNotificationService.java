@@ -1,5 +1,6 @@
 package service.notification;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import data.GPUInfo;
@@ -18,12 +19,16 @@ import service.PropertyManager;
  */
 public class MailNotificationService implements NotificationService {
 
+    public static final String MAIL_SUBJECT_TEMPLATE = "MAIL_SUBJECT_TEMPLATE";
+    public static final String MAIL_MESSAGE_TEMPLATE = "MAIL_MESSAGE_TEMPLATE";
+    public static final String USER_MAIL_RECIPIENT = "USER_MAIL_RECIPIENT";
+    public static final String USER_MAIL = "USER_MAIL";
+    public static final String USER_PASSWORD = "USER_PASSWORD";
+    public static final String SMTP_SERVER_ADRESS = "SMTP_SERVER_ADRESS";
+    public static final String PORT = "PORT";
+
     /**
      * Send email notification
-     * Gmail configuration requirements :
-     *  Two Steps Verification should be turned off.
-     *  Allow Less Secure App(should be turned on) : https://myaccount.google.com/lesssecureapps
-     *  Try this link if it still doesn't work : https://accounts.google.com/DisplayUnlockCaptcha
      * @param gpuInfo Nvidia GPU informations
      */
     @Override
@@ -32,42 +37,54 @@ public class MailNotificationService implements NotificationService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", PropertyManager.properties.getProperty("SMTP_SERVER_ADRESS"));
-        props.put("mail.smtp.port", PropertyManager.properties.getProperty("PORT"));
+        props.put("mail.smtp.host", PropertyManager.properties.getProperty(SMTP_SERVER_ADRESS));
+        props.put("mail.smtp.port", PropertyManager.properties.getProperty(PORT));
 
         // Get the Session object
         Session session = Session.getInstance(props,
                 new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(PropertyManager.properties.getProperty("USER_MAIL"), PropertyManager.properties.getProperty("USER_PASSWORD"));
+                        return new PasswordAuthentication(PropertyManager.properties.getProperty(USER_MAIL), PropertyManager.properties.getProperty(USER_PASSWORD));
                     }
+
                 });
 
         try {
 
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);
+            String sender = PropertyManager.properties.getProperty(USER_MAIL);
+            String recipient = PropertyManager.properties.getProperty(USER_MAIL_RECIPIENT);
 
-            message.setFrom(new InternetAddress(PropertyManager.properties.getProperty("USER_MAIL")));
+            // If recipient email is null then use sender mail for the recipient email
+            if (recipient == null) {
 
+                recipient = sender;
+            }
+
+            // Set the sender
+            message.setFrom(new InternetAddress(sender));
+
+            // Set the recipient
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(PropertyManager.properties.getProperty("USER_MAIL_DEST")));
+                    InternetAddress.parse(recipient));
 
             // Set Subject
-            message.setSubject("NVIDIA ".concat(gpuInfo.getGpuName().toString()).concat(" is available"));
+            message.setSubject(String.format(PropertyManager.properties.getProperty(MAIL_SUBJECT_TEMPLATE),
+                    new Locale(PropertyManager.properties.getProperty(LOCALE).toUpperCase()),
+                    gpuInfo.getGpuName()));
 
             // Put the content of your message
-            message.setText("Purchase link : ".concat(gpuInfo.getProductUrl()));
+            message.setText(String.format(PropertyManager.properties.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo.getProductUrl()));
 
             // Send message
             Transport.send(message);
 
-            System.out.println("Sent message successfully....");
+            System.out.println("Mail sent successfully");
 
         } catch (MessagingException e) {
 
             e.printStackTrace();
-
         }
     }
 }
