@@ -34,7 +34,7 @@ public class GPUInfoService {
             GPUNameToId.put(GPUInfoService.getClassDivGPU(gpuName), gpuName);
         }
 
-        JSONArray lineProducts = readJsonFromUrl(String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
+        JSONArray lineProducts = JSONManager.readJsonFromUrl(String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
                 locale.toString().toUpperCase(),
                 locale.toString().toUpperCase()))
                 .getJSONArray("listMap");
@@ -77,39 +77,5 @@ public class GPUInfoService {
         }
 
         return result.toString();
-    }
-
-    /**
-     * Parse JSON from an URL
-     * @param url URL
-     * @return JSONObjetct parsed
-     */
-    private JSONObject readJsonFromUrl(String url)  {
-
-        JSONObject json = null;
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = null;
-
-        try {
-
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        } catch (IOException | InterruptedException e) {
-
-            e.printStackTrace();
-        }
-
-        if (response != null) {
-
-            json = new JSONObject(response.body());
-        }
-
-        return json;
     }
 }

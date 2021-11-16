@@ -4,8 +4,7 @@ public class Main {
 
     // TODO :
     //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
-    //  Get the response from telegram notification message
-    //  Limit the number of telegram notification for one second
+    //  Limit the number of telegram notification per one second
     //  Optional :
     //      Expose API REST with last data
 

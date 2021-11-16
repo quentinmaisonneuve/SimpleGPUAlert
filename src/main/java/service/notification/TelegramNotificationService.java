@@ -1,14 +1,11 @@
 package service.notification;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Locale;
-
 import data.GPUInfo;
+import org.json.JSONObject;
+import service.JSONManager;
 import service.PropertyManager;
+
+import java.util.Locale;
 
 public class TelegramNotificationService implements NotificationService {
 
@@ -17,6 +14,7 @@ public class TelegramNotificationService implements NotificationService {
     public static final String CHAT_ID = "CHAT_ID";
     public static final String MAX_MESSAGE_PER_SECOND = "MAX_MESSAGE_PER_SECOND";
     public static final String TELEGRAM_MESSAGE_TEMPLATE = "TELEGRAM_MESSAGE_TEMPLATE";
+    public static final String LINE_RETURN = "%0A";
 
     /**
      * Send telegram notification
@@ -29,22 +27,26 @@ public class TelegramNotificationService implements NotificationService {
 
         String message = String.format(PropertyManager.properties.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
                 new Locale(PropertyManager.properties.getProperty(LOCALE).toUpperCase()),
+                LINE_RETURN,
                 gpuInfo.getGpuName(),
+                LINE_RETURN,
                 gpuInfo.getProductUrl());
 
         urlString = String.format(PropertyManager.properties.getProperty(TELEGRAM_API_LINK),
                 PropertyManager.properties.getProperty(API_TOKEN),
                 PropertyManager.properties.getProperty(CHAT_ID), message);
 
-        try {
+        JSONObject response = JSONManager.readJsonFromUrl(urlString.replace(" ", "%20"));
 
-            URL url = new URL(urlString);
-            URLConnection conn = url.openConnection();
-            InputStream is = new BufferedInputStream(conn.getInputStream());
+        if ((Boolean) response.get("ok")) {
 
-        } catch (IOException e) {
+            System.out.println("Telegram message sent successfully");
 
-            e.printStackTrace();
+        } else {
+
+            System.out.println("Telegram message not send for ".concat(gpuInfo.getGpuName().toString()));
+            System.out.println("Error code : ".concat(String.valueOf(response.get("error_code"))));
+            System.out.println("Error message : ".concat((String.valueOf(response.get("description")))));
         }
     }
 }
