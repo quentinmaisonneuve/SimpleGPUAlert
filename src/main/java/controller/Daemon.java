@@ -1,14 +1,18 @@
+package controller;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import controller.service.GPUInfoService;
+import controller.service.PropertyManager;
 import data.GPUInfo;
 import data.GPUName;
-import service.GPUInfoService;
-import service.PropertyManager;
-import service.notification.NotificationFactory;
-import service.notification.NotificationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import controller.service.notification.NotificationFactory;
+import controller.service.notification.NotificationService;
 
 public class Daemon implements Runnable {
 
@@ -16,13 +20,14 @@ public class Daemon implements Runnable {
     private static long lastStartRequest;
     private static long lastEndRequest;
 
-    // Services
-    private static GPUInfoService gpuService;
+    // Logger
+    public static Logger logger = LogManager.getLogger(Daemon.class);
 
     @Override
     public void run() {
 
-        gpuService = new GPUInfoService();
+        // Services
+        GPUInfoService gpuService = new GPUInfoService();
         List<NotificationService> notificationServices = NotificationFactory.getNotificationService();
 
         boolean runDaemon = PropertyManager.properties != null;
@@ -31,10 +36,7 @@ public class Daemon implements Runnable {
 
             while(runDaemon) {
 
-                Calendar now = Calendar.getInstance();
-                System.out.println(now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE) + ":" + now.get(Calendar.SECOND));
-
-                System.out.println(lastEndRequest - lastStartRequest);
+                logger.debug((lastEndRequest - lastStartRequest) + "ms");
 
                 Thread.sleep(Long.parseLong(PropertyManager.properties.getProperty("REFRESH_INTERVAL"))-(lastEndRequest - lastStartRequest));
 
@@ -45,12 +47,13 @@ public class Daemon implements Runnable {
 
                 List<GPUInfo> gpuInfos = gpuService.getListInfoGPU(new Locale(PropertyManager.properties.getProperty("LOCALE")));
 
-                for (GPUInfo gpuInfo : gpuInfos) {
+                for (NotificationService notificationService : notificationServices) {
 
-                    if(gpuInfo.isActive() && gpuToFind.contains(gpuInfo.getGpuName())) {
+                    for (GPUInfo gpuInfo : gpuInfos) {
 
-                        System.out.println(gpuInfo.getGpuName());
-                        for (NotificationService notificationService : notificationServices) {
+                        logger.info(gpuInfo.getGpuName());
+
+                        if(/*gpuInfo.isActive() &&*/ gpuToFind.contains(gpuInfo.getGpuName())) {
 
                             new Thread(() -> notificationService.sendNotification(gpuInfo)).start();
                         }

@@ -1,10 +1,11 @@
-package service;
+package controller.service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import controller.Daemon;
 import org.apache.maven.shared.utils.StringUtils;
 
 /**
@@ -62,7 +63,7 @@ public class PropertyManager {
         // Log error message
         if (properties == null) {
 
-            System.out.println(String.format(INCORRECT_PROPERTY_FILE, NAME_PROPERTY_FILE));
+            Daemon.logger.error(String.format(INCORRECT_PROPERTY_FILE, NAME_PROPERTY_FILE));
         }
     }
 }

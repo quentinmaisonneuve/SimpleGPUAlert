@@ -1,9 +1,10 @@
-package service.notification;
+package controller.service.notification;
 
 import data.GPUInfo;
 import org.json.JSONObject;
-import service.JSONManager;
-import service.PropertyManager;
+import controller.Daemon;
+import controller.service.JSONManager;
+import controller.service.PropertyManager;
 
 import java.util.Locale;
 
@@ -40,13 +41,13 @@ public class TelegramNotificationService implements NotificationService {
 
         if ((Boolean) response.get("ok")) {
 
-            System.out.println("Telegram message sent successfully");
+           Daemon.logger.info("Telegram message sent successfully");
 
         } else {
 
-            System.out.println("Telegram message not send for ".concat(gpuInfo.getGpuName().toString()));
-            System.out.println("Error code : ".concat(String.valueOf(response.get("error_code"))));
-            System.out.println("Error message : ".concat((String.valueOf(response.get("description")))));
+            Daemon.logger.error("Telegram message not send for ".concat(gpuInfo.getGpuName().toString()));
+            Daemon.logger.error("Error code : ".concat(String.valueOf(response.get("error_code"))));
+            Daemon.logger.error("Error message : ".concat((String.valueOf(response.get("description")))));
         }
     }
 }

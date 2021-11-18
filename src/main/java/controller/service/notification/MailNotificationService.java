@@ -1,18 +1,15 @@
-package service.notification;
+package controller.service.notification;
 
 import java.util.Locale;
 import java.util.Properties;
 
 import data.GPUInfo;
-import jakarta.mail.Authenticator;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
+import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import service.PropertyManager;
+import org.apache.maven.shared.utils.StringUtils;
+import controller.Daemon;
+import controller.service.PropertyManager;
 
 /**
  * Manage the different type of notification the program can send
@@ -57,7 +54,7 @@ public class MailNotificationService implements NotificationService {
             String recipient = PropertyManager.properties.getProperty(USER_MAIL_RECIPIENT);
 
             // If recipient email is null then use sender mail for the recipient email
-            if (recipient == null) {
+            if (StringUtils.isBlank(recipient)) {
 
                 recipient = sender;
             }
@@ -80,11 +77,15 @@ public class MailNotificationService implements NotificationService {
             // Send message
             Transport.send(message);
 
-            System.out.println("Mail sent successfully");
+            Daemon.logger.info("Mail sent successfully");
+
+        } catch (AuthenticationFailedException e) {
+
+            Daemon.logger.error("Bad credentials : Username and Password not accepted.");
 
         } catch (MessagingException e) {
 
-            e.printStackTrace();
+            Daemon.logger.error(e.getStackTrace());
         }
     }
 }

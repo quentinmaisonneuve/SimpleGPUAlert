@@ -1,10 +1,10 @@
-package service.notification;
+package controller.service.notification;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import data.NotificationChannel;
-import service.PropertyManager;
+import controller.service.PropertyManager;
 
 public class NotificationFactory {
 

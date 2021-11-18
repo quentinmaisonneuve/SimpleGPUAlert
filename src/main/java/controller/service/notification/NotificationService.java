@@ -1,4 +1,4 @@
-package service.notification;
+package controller.service.notification;
 
 import data.GPUInfo;
 
