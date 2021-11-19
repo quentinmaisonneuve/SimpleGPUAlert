@@ -30,7 +30,7 @@ public class Daemon implements Runnable {
     private static long lastEndRequest;
 
     // Logger
-    public static Logger logger = LogManager.getLogger(Daemon.class);
+    public static final Logger logger = LogManager.getLogger(Daemon.class);
 
     @Override
     public void run() {

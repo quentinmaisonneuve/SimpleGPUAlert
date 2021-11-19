@@ -25,6 +25,3 @@ hs_err_pid*
 # target and out folder
 out
 target
-
-# jarRepositories.xml
-.idea/jarRepositories.xml

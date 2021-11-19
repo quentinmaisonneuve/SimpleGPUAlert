@@ -16,16 +16,9 @@ public class NotificationFactory {
         for (NotificationChannel notificationChannel : NotificationChannel.StringToNotificationChannel(PropertyManager.properties.getProperty(Daemon.NOTIFICATION_CHANNELS))) {
 
             switch (notificationChannel) {
-
-                case MAIL :
-                    notificationServices.add(new MailNotificationService());
-                    break;
-
-                case TELEGRAM:
-                    notificationServices.add(new TelegramNotificationService());
-                    break;
-
-                default:
+                case MAIL -> notificationServices.add(new MailNotificationService());
+                case TELEGRAM -> notificationServices.add(new TelegramNotificationService());
+                default -> {}
             }
         }
 
