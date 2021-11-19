@@ -4,8 +4,8 @@ import controller.service.PropertyManager;
 public class Main {
 
     // TODO :
+    //  Before public repo : docker, readme/wiki, pre-built version for windows / linux / macos
     //  Limit the number of telegram notification per one second
-    //  Dockerise this app
     //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
     //  Optional :
     //      Expose API REST with last data
