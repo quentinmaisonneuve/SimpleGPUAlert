@@ -3,6 +3,8 @@ package model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Locale;
+
 @Getter
 @Setter
 public class GPUInfo {
@@ -12,4 +14,5 @@ public class GPUInfo {
     private boolean isActive;
     private String productUrl;
     private double price;
+    private Locale locale;
 }

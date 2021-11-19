@@ -66,7 +66,7 @@ public class MailNotificationService implements NotificationService {
 
             // Set Subject
             message.setSubject(String.format(PropertyManager.getProperty(MAIL_SUBJECT_TEMPLATE),
-                    new Locale(PropertyManager.getProperty(Daemon.LOCALES).toUpperCase()),
+                    new Locale(gpuInfo.getLocale().toString().toUpperCase()),
                     gpuInfo.getGpuName()));
 
             // Put the content of your message
@@ -75,7 +75,7 @@ public class MailNotificationService implements NotificationService {
             // Send message
             Transport.send(message);
 
-            Daemon.logger.info("Mail sent successfully to : ".concat(PropertyManager.getProperty(USER_MAIL_RECIPIENTS)));
+            Daemon.logger.info("Mail sent successfully to : ".concat(sender.toString()));
 
         } catch (AuthenticationFailedException e) {
 

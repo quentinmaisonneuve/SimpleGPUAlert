@@ -49,6 +49,7 @@ public class GPUInfoService {
                 gpuInfo.setActive(Boolean.parseBoolean(jsonLineItem.getString("is_active")));
                 gpuInfo.setProductUrl(jsonLineItem.getString("product_url"));
                 gpuInfo.setPrice(Double.parseDouble(jsonLineItem.getString("price")));
+                gpuInfo.setLocale(locale);
 
                 gpuInfos.add(gpuInfo);
             }

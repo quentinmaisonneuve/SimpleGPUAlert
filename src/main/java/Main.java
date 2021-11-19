@@ -5,7 +5,7 @@ public class Main {
 
     // TODO :
     //  Before public repo : docker, readme/wiki
-    //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
+    //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, WHATSAPP, DESKTOP (for windows, linux and macos) notifications
     //  Optional :
     //      Expose API REST with last data
     //      Limit the number of notification cf implement this for NotificationService : https://stackoverflow.com/questions/667508/whats-a-good-rate-limiting-algorithm

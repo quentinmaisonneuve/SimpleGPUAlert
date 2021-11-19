@@ -72,7 +72,12 @@ public class Daemon implements Runnable {
 
             while(runDaemon) {
 
-                Thread.sleep(Long.parseLong(PropertyManager.getProperty(REFRESH_INTERVAL))-(lastEndRequest - lastStartRequest));
+                long timeToWait = Long.parseLong(PropertyManager.getProperty(REFRESH_INTERVAL))-(lastEndRequest - lastStartRequest);
+
+                if (timeToWait > 0) {
+
+                    Thread.sleep(timeToWait);
+                }
 
                 logger.debug((lastEndRequest - lastStartRequest) + "ms");
 

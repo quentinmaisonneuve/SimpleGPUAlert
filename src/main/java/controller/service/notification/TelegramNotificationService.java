@@ -26,7 +26,7 @@ public class TelegramNotificationService implements NotificationService {
         String urlString;
 
         String message = String.format(PropertyManager.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
-                new Locale(PropertyManager.getProperty(Daemon.LOCALES).toUpperCase()),
+                gpuInfo.getLocale().toString().toUpperCase(),
                 LINE_RETURN,
                 gpuInfo.getGpuName(),
                 LINE_RETURN,
@@ -36,7 +36,7 @@ public class TelegramNotificationService implements NotificationService {
                 PropertyManager.getProperty(API_TOKEN),
                 PropertyManager.getProperty(CHAT_ID), message);
 
-        JSONObject response = JSONManager.readJsonFromUrl(urlString.replace(" ", "%20"));
+        JSONObject response = JSONManager.readJsonFromUrl(urlString.replace(" ", "%20").replace("+", "%2B"));
 
         if ((Boolean) response.get("ok")) {
 
