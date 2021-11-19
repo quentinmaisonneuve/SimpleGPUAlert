@@ -4,8 +4,7 @@ import controller.service.PropertyManager;
 public class Main {
 
     // TODO :
-    //  Add a timer when a gpu is marked as available !!!
-    //  Before public repo : docker, readme/wiki, pre-built version for windows / linux / macos
+    //  Before public repo : docker, readme/wiki
     //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
     //  Optional :
     //      Expose API REST with last data
