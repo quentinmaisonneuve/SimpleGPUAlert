@@ -2,10 +2,10 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%-5level}{FATAL=black, ERROR=red, WARN=blue, INFO=white, DEBUG=green, TRACE=blue} (%C{1}) - %msg%n" disableAnsi="false"/>
         </Console>
         <File name="fout" fileName="SimpleGPUAlert.log" append="true">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%-5level} %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level (%C{1}) - %msg%n"/>
         </File>
     </Appenders>
     <Loggers>
