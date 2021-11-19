@@ -1,19 +1,25 @@
 package controller;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.maven.shared.utils.StringUtils;
 
 import controller.service.GPUInfoService;
 import controller.service.PropertyManager;
-import model.GPUInfo;
-import model.GPUName;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.maven.shared.utils.StringUtils;
-
 import controller.service.notification.NotificationFactory;
 import controller.service.notification.NotificationService;
+import model.GPUInfo;
+import model.GPUName;
 
 public class Daemon implements Runnable {
 
@@ -23,7 +29,9 @@ public class Daemon implements Runnable {
     public static final String NOTIFICATION_CHANNELS = "NOTIFICATION_CHANNELS";
     public static final String SEPARATOR = ",";
     public static final String GPUS = "GPUS";
+    public static final String TIMEOUT_NOTIFICATION = "TIMEOUT_NOTIFICATION";
     public static final String TEST_NOTIFICATION = "TEST_NOTIFICATION";
+    public static final String LOG_LEVEL = "LOG_LEVEL";
 
     // Properties of the program
     private static long lastStartRequest;
@@ -35,31 +43,36 @@ public class Daemon implements Runnable {
     @Override
     public void run() {
 
+        setLogLevel();
+
         logger.info("SimpleGPUAlert");
-        logger.info("Searching GPUs : ".concat(PropertyManager.properties.getProperty(GPUS)));
-        logger.info("In : ".concat(PropertyManager.properties.getProperty(LOCALES)));
+        logger.info("Searching GPUs : ".concat(PropertyManager.getProperty(GPUS)));
+        logger.info("In : ".concat(PropertyManager.getProperty(LOCALES)));
 
         // Services
         GPUInfoService gpuService = new GPUInfoService();
         List<NotificationService> notificationServices = NotificationFactory.getNotificationService();
 
         // Get the list of GPUs
-        List<GPUName> gpuToFind = Arrays.stream(PropertyManager.properties.getProperty(GPUS).split(SEPARATOR))
+        List<GPUName> gpuToFind = Arrays.stream(PropertyManager.getProperty(GPUS).split(SEPARATOR))
                 .map(GPUName::StringToGPU)
                 .toList();
 
         // Get the locales
-        String[] locales = PropertyManager.properties.getProperty(LOCALES).split(SEPARATOR);
+        String[] locales = PropertyManager.getProperty(LOCALES).split(SEPARATOR);
 
-        boolean testNotification = Boolean.parseBoolean(PropertyManager.properties.getProperty(TEST_NOTIFICATION));
+        // Last notification
+        Map<String, LocalDateTime> lastNotification = new HashMap<>();
 
-        boolean runDaemon = PropertyManager.properties != null;
+        boolean testNotification = Boolean.parseBoolean(PropertyManager.getProperty(TEST_NOTIFICATION));
+
+        boolean runDaemon = PropertyManager.isLoaded();
 
         try {
 
             while(runDaemon) {
 
-                Thread.sleep(Long.parseLong(PropertyManager.properties.getProperty(REFRESH_INTERVAL))-(lastEndRequest - lastStartRequest));
+                Thread.sleep(Long.parseLong(PropertyManager.getProperty(REFRESH_INTERVAL))-(lastEndRequest - lastStartRequest));
 
                 logger.debug((lastEndRequest - lastStartRequest) + "ms");
 
@@ -71,7 +84,7 @@ public class Daemon implements Runnable {
 
                     if (StringUtils.isNotBlank(locale)) {
 
-                        List<GPUInfo> gpuInfos = gpuService.getListInfoGPU(new Locale(locale));
+                        List<GPUInfo> gpuInfos = gpuService.getListInfoGPU(new Locale(locale.trim()));
 
                         // Loop on the notification services
                         for (NotificationService notificationService : notificationServices) {
@@ -79,8 +92,15 @@ public class Daemon implements Runnable {
                             // Loop on the infos of the GPUs
                             for (GPUInfo gpuInfo : gpuInfos) {
 
-                                if ((gpuInfo.isActive() || testNotification) && gpuToFind.contains(gpuInfo.getGpuName())) {
+                                String keyLastnotification = locale.concat(":")
+                                        .concat(notificationService.getClass().getName())
+                                        .concat(":")
+                                        .concat(gpuInfo.getGpuName().toString());
 
+                                if (((gpuInfo.isActive() && isTimeoutOver(lastNotification.get(keyLastnotification))) || testNotification)
+                                        && gpuToFind.contains(gpuInfo.getGpuName())) {
+
+                                    lastNotification.put(keyLastnotification, LocalDateTime.now());
                                     new Thread(() -> notificationService.sendNotification(gpuInfo)).start();
                                 }
                             }
@@ -96,5 +116,33 @@ public class Daemon implements Runnable {
 
             Daemon.logger.error(e);
         }
+    }
+
+    /**
+     * Set the log level from properties
+     */
+    private void setLogLevel() {
+
+        String loglLevel = PropertyManager.getProperty(LOG_LEVEL);
+
+        if (StringUtils.isNotBlank(loglLevel)) {
+
+            LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+            ctx.getConfiguration()
+                    .getLoggerConfig(LogManager.ROOT_LOGGER_NAME)
+                    .setLevel(Level.getLevel(loglLevel));
+            ctx.updateLoggers();
+        }
+    }
+
+    /**
+     * Return true if the timeout required is reach
+     * @param lastNotification Last notification from a channel and a type of GPU
+     * @return True if null or the time between two notifications has been reached false otherwise
+     */
+    private boolean isTimeoutOver(LocalDateTime lastNotification) {
+
+        return lastNotification == null || Duration.between(lastNotification, LocalDateTime.now()).toMinutes() >
+                    Long.parseLong(PropertyManager.getProperty(TIMEOUT_NOTIFICATION));
     }
 }

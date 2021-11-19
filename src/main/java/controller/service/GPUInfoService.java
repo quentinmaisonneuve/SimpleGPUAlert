@@ -23,7 +23,7 @@ public class GPUInfoService {
 
         List<GPUInfo> gpuInfos = new ArrayList<>();
         Map<String, GPUName> GPUNameToId = new HashMap<>();
-        String url = String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
+        String url = String.format(PropertyManager.getProperty("NVIDIA_API_LINK"),
                 locale.toString().toUpperCase(),
                 locale.toString().toUpperCase());
 

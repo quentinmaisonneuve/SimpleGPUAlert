@@ -33,14 +33,14 @@ public class MailNotificationService implements NotificationService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", PropertyManager.properties.getProperty(SMTP_SERVER_ADRESS));
-        props.put("mail.smtp.port", PropertyManager.properties.getProperty(PORT));
+        props.put("mail.smtp.host", PropertyManager.getProperty(SMTP_SERVER_ADRESS));
+        props.put("mail.smtp.port", PropertyManager.getProperty(PORT));
 
         // Get the Session object
         Session session = Session.getInstance(props,
                 new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(PropertyManager.properties.getProperty(USER_MAIL), PropertyManager.properties.getProperty(USER_PASSWORD));
+                        return new PasswordAuthentication(PropertyManager.getProperty(USER_MAIL), PropertyManager.getProperty(USER_PASSWORD));
                     }
 
                 });
@@ -49,8 +49,8 @@ public class MailNotificationService implements NotificationService {
 
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);
-            InternetAddress sender = new InternetAddress(PropertyManager.properties.getProperty(USER_MAIL));
-            InternetAddress[] recipient = InternetAddress.parse(PropertyManager.properties.getProperty(USER_MAIL_RECIPIENTS));
+            InternetAddress sender = new InternetAddress(PropertyManager.getProperty(USER_MAIL));
+            InternetAddress[] recipient = InternetAddress.parse(PropertyManager.getProperty(USER_MAIL_RECIPIENTS));
 
             // If recipient email is null then use sender mail for the recipient email
             if (recipient.length == 0) {
@@ -65,21 +65,21 @@ public class MailNotificationService implements NotificationService {
             message.setRecipients(Message.RecipientType.TO, recipient);
 
             // Set Subject
-            message.setSubject(String.format(PropertyManager.properties.getProperty(MAIL_SUBJECT_TEMPLATE),
-                    new Locale(PropertyManager.properties.getProperty(Daemon.LOCALES).toUpperCase()),
+            message.setSubject(String.format(PropertyManager.getProperty(MAIL_SUBJECT_TEMPLATE),
+                    new Locale(PropertyManager.getProperty(Daemon.LOCALES).toUpperCase()),
                     gpuInfo.getGpuName()));
 
             // Put the content of your message
-            message.setText(String.format(PropertyManager.properties.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo.getProductUrl()));
+            message.setText(String.format(PropertyManager.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo.getProductUrl()));
 
             // Send message
             Transport.send(message);
 
-            Daemon.logger.info("Mail sent successfully to : ".concat(PropertyManager.properties.getProperty(USER_MAIL_RECIPIENTS)));
+            Daemon.logger.info("Mail sent successfully to : ".concat(PropertyManager.getProperty(USER_MAIL_RECIPIENTS)));
 
         } catch (AuthenticationFailedException e) {
 
-            Daemon.logger.error("Bad credentials : Username and Password not accepted.");
+            Daemon.logger.error("Mail not sent : Bad credentials - Username and Password not accepted.");
 
         } catch (MessagingException e) {
 

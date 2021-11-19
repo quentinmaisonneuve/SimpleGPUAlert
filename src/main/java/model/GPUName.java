@@ -27,7 +27,7 @@ public enum GPUName {
 
             for (GPUName g : GPUName.values()) {
 
-                if (gpuName.toLowerCase().equals(g.toString())) {
+                if (gpuName.trim().toLowerCase().equals(g.toString())) {
 
                     gpu = g;
                     break;

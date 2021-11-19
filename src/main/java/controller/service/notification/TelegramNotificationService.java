@@ -6,7 +6,6 @@ import controller.Daemon;
 import controller.service.JSONManager;
 import controller.service.PropertyManager;
 
-import java.util.List;
 import java.util.Locale;
 
 public class TelegramNotificationService implements NotificationService {
@@ -26,16 +25,16 @@ public class TelegramNotificationService implements NotificationService {
 
         String urlString;
 
-        String message = String.format(PropertyManager.properties.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
-                new Locale(PropertyManager.properties.getProperty(Daemon.LOCALES).toUpperCase()),
+        String message = String.format(PropertyManager.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
+                new Locale(PropertyManager.getProperty(Daemon.LOCALES).toUpperCase()),
                 LINE_RETURN,
                 gpuInfo.getGpuName(),
                 LINE_RETURN,
                 gpuInfo.getProductUrl());
 
-        urlString = String.format(PropertyManager.properties.getProperty(TELEGRAM_API_LINK),
-                PropertyManager.properties.getProperty(API_TOKEN),
-                PropertyManager.properties.getProperty(CHAT_ID), message);
+        urlString = String.format(PropertyManager.getProperty(TELEGRAM_API_LINK),
+                PropertyManager.getProperty(API_TOKEN),
+                PropertyManager.getProperty(CHAT_ID), message);
 
         JSONObject response = JSONManager.readJsonFromUrl(urlString.replace(" ", "%20"));
 
