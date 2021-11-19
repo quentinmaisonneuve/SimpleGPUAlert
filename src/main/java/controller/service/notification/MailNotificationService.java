@@ -7,7 +7,6 @@ import model.GPUInfo;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.apache.maven.shared.utils.StringUtils;
 import controller.Daemon;
 import controller.service.PropertyManager;
 
@@ -18,7 +17,7 @@ public class MailNotificationService implements NotificationService {
 
     public static final String MAIL_SUBJECT_TEMPLATE = "MAIL_SUBJECT_TEMPLATE";
     public static final String MAIL_MESSAGE_TEMPLATE = "MAIL_MESSAGE_TEMPLATE";
-    public static final String USER_MAIL_RECIPIENT = "USER_MAIL_RECIPIENT";
+    public static final String USER_MAIL_RECIPIENTS = "USER_MAIL_RECIPIENTS";
     public static final String USER_MAIL = "USER_MAIL";
     public static final String USER_PASSWORD = "USER_PASSWORD";
     public static final String SMTP_SERVER_ADRESS = "SMTP_SERVER_ADRESS";
@@ -50,21 +49,20 @@ public class MailNotificationService implements NotificationService {
 
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);
-            String sender = PropertyManager.properties.getProperty(USER_MAIL);
-            String recipient = PropertyManager.properties.getProperty(USER_MAIL_RECIPIENT);
+            InternetAddress sender = new InternetAddress(PropertyManager.properties.getProperty(USER_MAIL));
+            InternetAddress[] recipient = InternetAddress.parse(PropertyManager.properties.getProperty(USER_MAIL_RECIPIENTS));
 
             // If recipient email is null then use sender mail for the recipient email
-            if (StringUtils.isBlank(recipient)) {
+            if (recipient.length == 0) {
 
-                recipient = sender;
+                recipient = new InternetAddress[] {sender};
             }
 
             // Set the sender
-            message.setFrom(new InternetAddress(sender));
+            message.setFrom(sender);
 
             // Set the recipient
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(recipient));
+            message.setRecipients(Message.RecipientType.TO, recipient);
 
             // Set Subject
             message.setSubject(String.format(PropertyManager.properties.getProperty(MAIL_SUBJECT_TEMPLATE),
@@ -77,7 +75,7 @@ public class MailNotificationService implements NotificationService {
             // Send message
             Transport.send(message);
 
-            Daemon.logger.info("Mail sent successfully");
+            Daemon.logger.info("Mail sent successfully to : ".concat(PropertyManager.properties.getProperty(USER_MAIL_RECIPIENTS)));
 
         } catch (AuthenticationFailedException e) {
 
@@ -85,7 +83,7 @@ public class MailNotificationService implements NotificationService {
 
         } catch (MessagingException e) {
 
-            Daemon.logger.error(e.getStackTrace());
+            Daemon.logger.error(e);
         }
     }
 }

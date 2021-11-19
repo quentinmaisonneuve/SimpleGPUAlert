@@ -8,6 +8,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import controller.Daemon;
+
 /**
  * Manage JSON from URL
  */
@@ -36,7 +38,7 @@ public class JSONManager {
 
         } catch (IOException | InterruptedException e) {
 
-            e.printStackTrace();
+            Daemon.logger.error(e);
         }
 
         if (response != null) {

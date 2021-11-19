@@ -94,7 +94,7 @@ public class Daemon implements Runnable {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            Daemon.logger.error(e);
         }
     }
 }

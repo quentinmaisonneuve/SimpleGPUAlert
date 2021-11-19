@@ -36,7 +36,7 @@ public class PropertyManager {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            Daemon.logger.error(e);
         }
 
         return properties;
