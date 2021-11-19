@@ -3,7 +3,7 @@ package controller.service.notification;
 import java.util.Locale;
 import java.util.Properties;
 
-import data.GPUInfo;
+import model.GPUInfo;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -68,7 +68,7 @@ public class MailNotificationService implements NotificationService {
 
             // Set Subject
             message.setSubject(String.format(PropertyManager.properties.getProperty(MAIL_SUBJECT_TEMPLATE),
-                    new Locale(PropertyManager.properties.getProperty(LOCALE).toUpperCase()),
+                    new Locale(PropertyManager.properties.getProperty(Daemon.LOCALES).toUpperCase()),
                     gpuInfo.getGpuName()));
 
             // Put the content of your message

@@ -3,18 +3,17 @@ package controller.service.notification;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.NotificationChannel;
+import controller.Daemon;
+import model.NotificationChannel;
 import controller.service.PropertyManager;
 
 public class NotificationFactory {
-
-    public static final String NOTIFICATION_CHANNELS = "NOTIFICATION_CHANNELS";
 
     public static List<NotificationService> getNotificationService() {
 
         List<NotificationService> notificationServices = new ArrayList<>();
 
-        for (NotificationChannel notificationChannel : NotificationChannel.StringToNotificationChannel(PropertyManager.properties.getProperty(NOTIFICATION_CHANNELS))) {
+        for (NotificationChannel notificationChannel : NotificationChannel.StringToNotificationChannel(PropertyManager.properties.getProperty(Daemon.NOTIFICATION_CHANNELS))) {
 
             switch (notificationChannel) {
 

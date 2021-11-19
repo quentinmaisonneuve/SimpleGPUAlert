@@ -1,13 +1,11 @@
 package controller.service.notification;
 
-import data.GPUInfo;
+import model.GPUInfo;
 
 /**
  * Skeleton of notification services
  */
 public interface NotificationService {
-
-    String LOCALE = "LOCALE";
 
     /**
      * Send notification on the channel implemented

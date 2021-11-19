@@ -9,8 +9,9 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import data.GPUInfo;
-import data.GPUName;
+import controller.Daemon;
+import model.GPUInfo;
+import model.GPUName;
 
 /**
  * Manage the different type of notification the program can send
@@ -21,18 +22,19 @@ public class GPUInfoService {
     public List<GPUInfo> getListInfoGPU(Locale locale) {
 
         List<GPUInfo> gpuInfos = new ArrayList<>();
-
         Map<String, GPUName> GPUNameToId = new HashMap<>();
+        String url = String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
+                locale.toString().toUpperCase(),
+                locale.toString().toUpperCase());
 
         for (GPUName gpuName : GPUName.values()) {
 
             GPUNameToId.put(GPUInfoService.getClassDivGPU(gpuName), gpuName);
         }
 
-        JSONArray lineProducts = JSONManager.readJsonFromUrl(String.format(PropertyManager.properties.getProperty("NVIDIA_API_LINK"),
-                locale.toString().toUpperCase(),
-                locale.toString().toUpperCase()))
-                .getJSONArray("listMap");
+        Daemon.logger.info("Request on : ".concat(url));
+
+        JSONArray lineProducts = JSONManager.readJsonFromUrl(url).getJSONArray("listMap");
 
         for (Object o : lineProducts) {
 

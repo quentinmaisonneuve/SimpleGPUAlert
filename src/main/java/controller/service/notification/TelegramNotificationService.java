@@ -1,6 +1,6 @@
 package controller.service.notification;
 
-import data.GPUInfo;
+import model.GPUInfo;
 import org.json.JSONObject;
 import controller.Daemon;
 import controller.service.JSONManager;
@@ -27,7 +27,7 @@ public class TelegramNotificationService implements NotificationService {
         String urlString;
 
         String message = String.format(PropertyManager.properties.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
-                new Locale(PropertyManager.properties.getProperty(LOCALE).toUpperCase()),
+                new Locale(PropertyManager.properties.getProperty(Daemon.LOCALES).toUpperCase()),
                 LINE_RETURN,
                 gpuInfo.getGpuName(),
                 LINE_RETURN,

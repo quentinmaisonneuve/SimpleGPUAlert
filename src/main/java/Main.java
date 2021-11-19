@@ -5,6 +5,7 @@ public class Main {
 
     // TODO :
     //  Limit the number of telegram notification per one second
+    //  Dockerise this app
     //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP (for windows, linux and macos) notifications
     //  Optional :
     //      Expose API REST with last data
