@@ -1,12 +1,11 @@
 package controller.service.notification;
 
-import model.GPUInfo;
 import org.json.JSONObject;
+
 import controller.Daemon;
 import controller.service.JSONManager;
 import controller.service.PropertyManager;
-
-import java.util.Locale;
+import model.GPUInfo;
 
 public class TelegramNotificationService implements NotificationService {
 

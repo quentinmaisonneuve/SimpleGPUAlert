@@ -1,14 +1,19 @@
 package controller.service.notification;
 
-import java.util.Locale;
 import java.util.Properties;
 
-import model.GPUInfo;
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import controller.Daemon;
 import controller.service.PropertyManager;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import model.GPUInfo;
 
 /**
  * Manage the different type of notification the program can send

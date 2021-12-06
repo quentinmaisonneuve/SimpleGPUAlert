@@ -13,7 +13,7 @@ public class NotificationFactory {
 
         List<NotificationService> notificationServices = new ArrayList<>();
 
-        for (NotificationChannel notificationChannel : NotificationChannel.StringToNotificationChannel(PropertyManager.getProperty(Daemon.NOTIFICATION_CHANNELS))) {
+        for (NotificationChannel notificationChannel : NotificationChannel.StringToNotificationChannel(PropertyManager.getProperty(Daemon.NOTIFICATION_CHANNEL))) {
 
             switch (notificationChannel) {
                 case MAIL -> notificationServices.add(new MailNotificationService());
