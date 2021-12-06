@@ -16,20 +16,19 @@ import org.apache.maven.shared.utils.StringUtils;
 
 import controller.service.GPUInfoService;
 import controller.service.PropertyManager;
-import controller.service.notification.NotificationFactory;
-import controller.service.notification.NotificationService;
+import controller.service.notification.NotificationManager;
 import model.GPUInfo;
 import model.GPUName;
+import model.NotificationChannel;
 
 public class Daemon implements Runnable {
 
     // Constants
     public static final String REFRESH_INTERVAL = "REFRESH_INTERVAL";
     public static final String LOCALES = "LOCALES";
-    public static final String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
     public static final String SEPARATOR = ",";
     public static final String GPU = "GPU";
-    public static final String TIMEOUT_NOTIFICATION = "TIMEOUT_NOTIFICATION";
+    public static final String TIMEOUT_NOTIFICATION_DROP = "TIMEOUT_NOTIFICATION_DROP";
     public static final String TEST_NOTIFICATION = "TEST_NOTIFICATION";
     public static final String LOG_LEVEL = "LOG_LEVEL";
 
@@ -62,7 +61,7 @@ public class Daemon implements Runnable {
 
         // Services
         GPUInfoService gpuService = new GPUInfoService();
-        List<NotificationService> notificationServices = NotificationFactory.getNotificationService();
+        List<NotificationChannel> listNotificationChannel = NotificationManager.getListNotificationChannel();
 
         // Initialize properties
         initProperties();
@@ -84,14 +83,14 @@ public class Daemon implements Runnable {
                     Thread.sleep(timeToWait);
                 }
 
-                logger.debug((lastEndRequest - lastStartRequest) + "ms");
+                logger.debug("Loop duration : ".concat(String.valueOf(lastEndRequest - lastStartRequest).concat("ms")));
 
                 // Begin of process
                 lastStartRequest = System.currentTimeMillis();
 
 
                 // Loop on the notification services
-                for (NotificationService notificationService : notificationServices) {
+                for (NotificationChannel notificationChannel : listNotificationChannel) {
 
                     // Loop on the locales
                     for (String locale : locales) {
@@ -104,7 +103,7 @@ public class Daemon implements Runnable {
                             for (GPUInfo gpuInfo : gpuInfos) {
 
                                 String keyLastnotification = locale.concat(":")
-                                        .concat(notificationService.getClass().getName())
+                                        .concat(notificationChannel.toString())
                                         .concat(":")
                                         .concat(gpuInfo.getGpuName().toString());
 
@@ -113,7 +112,7 @@ public class Daemon implements Runnable {
 
                                     lastDrops.put(keyLastnotification, gpuInfo);
                                     lastNotifications.put(keyLastnotification, LocalDateTime.now());
-                                    new Thread(() -> notificationService.sendNotification(gpuInfo)).start();
+                                    NotificationManager.sendNotification(notificationChannel, gpuInfo);
                                 }
                             }
                         }
@@ -147,7 +146,7 @@ public class Daemon implements Runnable {
         locales = PropertyManager.getProperty(LOCALES).split(SEPARATOR);
 
         // Timeout notification
-        timeoutNotification = Long.parseLong(PropertyManager.getProperty(TIMEOUT_NOTIFICATION));
+        timeoutNotification = Long.parseLong(PropertyManager.getProperty(TIMEOUT_NOTIFICATION_DROP));
 
         // Test notification
         testNotification = Boolean.parseBoolean(PropertyManager.getProperty(TEST_NOTIFICATION));

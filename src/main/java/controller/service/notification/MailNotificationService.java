@@ -47,7 +47,6 @@ public class MailNotificationService implements NotificationService {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(PropertyManager.getProperty(USER_MAIL), PropertyManager.getProperty(USER_PASSWORD));
                     }
-
                 });
 
         try {
