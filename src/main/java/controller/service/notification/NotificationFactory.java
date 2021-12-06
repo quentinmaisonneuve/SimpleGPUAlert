@@ -18,6 +18,7 @@ public class NotificationFactory {
             switch (notificationChannel) {
                 case MAIL -> notificationServices.add(new MailNotificationService());
                 case TELEGRAM -> notificationServices.add(new TelegramNotificationService());
+                case WEB_REQUEST -> notificationServices.add(new WebRequestNotificationService());
                 default -> {}
             }
         }
