@@ -72,18 +72,8 @@ public class Daemon implements Runnable {
 
             while(PropertyManager.isLoaded()) {
 
-                long timeToWait = refreshInterval - (lastEndRequest - lastStartRequest);
-
-                if (timeToWait > 0) {
-
-                    Thread.sleep(timeToWait);
-                }
-
-                logger.debug("Loop duration : ".concat(String.valueOf(lastEndRequest - lastStartRequest).concat("ms")));
-
                 // Begin of process
                 lastStartRequest = System.currentTimeMillis();
-
 
                 // Loop on the notification services
                 for (NotificationChannel notificationChannel : NotificationManager.getListNotificationChannel()) {
@@ -117,6 +107,16 @@ public class Daemon implements Runnable {
 
                 // End of process
                 lastEndRequest = System.currentTimeMillis();
+
+                logger.debug("Loop duration : ".concat(String.valueOf(lastEndRequest - lastStartRequest).concat("ms")));
+
+                // Sleep before requesting again
+                long timeToWait = refreshInterval - (lastEndRequest - lastStartRequest);
+
+                if (timeToWait > 0) {
+
+                    Thread.sleep(timeToWait);
+                }
             }
 
         } catch (Exception e) {
