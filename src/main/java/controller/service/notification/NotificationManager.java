@@ -34,6 +34,7 @@ public class NotificationManager {
         switch (channel) {
 
             case DESKTOP -> notificationService = new DesktopNotificationService();
+            case DISCORD -> notificationService = new DiscordNotificationService();
             case MAIL -> notificationService = new MailNotificationService();
             case TELEGRAM -> notificationService = new TelegramNotificationService();
             case WEB_REQUEST -> notificationService = new WebRequestNotificationService();
@@ -42,9 +43,10 @@ public class NotificationManager {
 
         long delay = 0;
 
-        // If it's not the first notification on this channel
+        // If the timeout is set then delay the thread if needed
         if (getTimeoutNotificationChannel() > 0) {
 
+            // If it's not the first notification on this channel
             if (lastNotificationMap.get(channel) != null) {
 
                 Daemon.logger.debug("Last notification : ".concat(lastNotificationMap.get(channel).format(formatter)));
