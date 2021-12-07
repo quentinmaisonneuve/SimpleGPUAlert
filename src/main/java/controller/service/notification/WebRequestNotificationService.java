@@ -18,7 +18,7 @@ public class WebRequestNotificationService implements NotificationService {
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
-        String url = PropertyManager.getProperty(URL_TO_CALL);
+        String url = NotificationManager.formatString(PropertyManager.getProperty(URL_TO_CALL), gpuInfo, true);
 
         try {
 
@@ -42,6 +42,7 @@ public class WebRequestNotificationService implements NotificationService {
         } catch (IllegalArgumentException e) {
 
             Daemon.logger.error("Bad url");
+            Daemon.logger.error("URL : ".concat(url));
 
         } catch (IOException | InterruptedException e) {
 

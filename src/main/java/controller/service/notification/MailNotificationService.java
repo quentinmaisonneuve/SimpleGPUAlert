@@ -69,12 +69,12 @@ public class MailNotificationService implements NotificationService {
             message.setRecipients(Message.RecipientType.TO, recipient);
 
             // Set Subject
-            message.setSubject(String.format(PropertyManager.getProperty(MAIL_SUBJECT_TEMPLATE),
-                    gpuInfo.getLocale().toString().toUpperCase(),
-                    gpuInfo.getGpuName()));
+            message.setSubject(NotificationManager.formatString(PropertyManager.getProperty(MAIL_SUBJECT_TEMPLATE), gpuInfo, false));
+
+
 
             // Put the content of your message
-            message.setText(String.format(PropertyManager.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo.getProductUrl()));
+            message.setText(NotificationManager.formatString(PropertyManager.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo, false));
 
             // Send message
             Transport.send(message);

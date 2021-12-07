@@ -88,6 +88,24 @@ public class NotificationManager {
         return listNotificationChannel;
     }
 
+    protected static String formatString(String message, GPUInfo gpuInfo, boolean isURL) {
+
+        String formattedMessage = message.replace("%i", gpuInfo.getIdGPU())
+                .replace("%g", gpuInfo.getGpuName().toString())
+                .replace("%p", gpuInfo.getProductUrl())
+                .replace("%l", gpuInfo.getLocale().toString().toUpperCase())
+                .replace("%b", String.valueOf(gpuInfo.getPrice()));
+
+        if (isURL) {
+
+            formattedMessage = formattedMessage.replace("%r", "%0A")
+                    .replace(" ", "%20")
+                    .replace("+", "%2B");
+        }
+
+        return formattedMessage;
+    }
+
     private static long getTimeoutNotificationChannel() {
 
         if (timeoutNotificationChannel < 0) {

@@ -13,7 +13,7 @@ public class TelegramNotificationService implements NotificationService {
     public static final String API_TOKEN = "API_TOKEN";
     public static final String CHAT_ID = "CHAT_ID";
     public static final String TELEGRAM_MESSAGE_TEMPLATE = "TELEGRAM_MESSAGE_TEMPLATE";
-    public static final String LINE_RETURN = "%0A";
+
 
     /**
      * Send telegram notification
@@ -22,20 +22,12 @@ public class TelegramNotificationService implements NotificationService {
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
-        String urlString;
-
-        String message = String.format(PropertyManager.getProperty(TELEGRAM_MESSAGE_TEMPLATE),
-                gpuInfo.getLocale().toString().toUpperCase(),
-                LINE_RETURN,
-                gpuInfo.getGpuName(),
-                LINE_RETURN,
-                gpuInfo.getProductUrl());
-
-        urlString = String.format(PropertyManager.getProperty(TELEGRAM_API_LINK),
+        String url = String.format(PropertyManager.getProperty(TELEGRAM_API_LINK),
                 PropertyManager.getProperty(API_TOKEN),
-                PropertyManager.getProperty(CHAT_ID), message);
+                PropertyManager.getProperty(CHAT_ID),
+                PropertyManager.getProperty(TELEGRAM_MESSAGE_TEMPLATE));
 
-        JSONObject response = JSONManager.readJsonFromUrl(urlString.replace(" ", "%20").replace("+", "%2B"));
+        JSONObject response = JSONManager.readJsonFromUrl(NotificationManager.formatString(PropertyManager.getProperty(url), gpuInfo, true));
 
         if ((Boolean) response.get("ok")) {
 

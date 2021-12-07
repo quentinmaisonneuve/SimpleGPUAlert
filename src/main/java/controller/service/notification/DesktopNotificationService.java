@@ -42,10 +42,9 @@ public class DesktopNotificationService implements NotificationService {
             });
 
             // Display message
-            trayIcon.displayMessage(String.format(PropertyManager.getProperty(DESKTOP_TITLE_TEMPLATE),
-                    gpuInfo.getLocale().toString().toUpperCase(),
-                    gpuInfo.getGpuName()),
-                    String.format(PropertyManager.getProperty(DESKTOP_MESSAGE_TEMPLATE),gpuInfo.getProductUrl()),
+            trayIcon.displayMessage(
+                    NotificationManager.formatString(PropertyManager.getProperty(DESKTOP_TITLE_TEMPLATE), gpuInfo, false),
+                    NotificationManager.formatString(PropertyManager.getProperty(DESKTOP_MESSAGE_TEMPLATE), gpuInfo, false),
                     TrayIcon.MessageType.INFO);
 
         } catch(Exception e) {

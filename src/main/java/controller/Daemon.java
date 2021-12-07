@@ -42,16 +42,9 @@ public class Daemon implements Runnable {
     private long refreshInterval;
     private boolean testNotification;
 
-    // Request timer variables
-    private static long lastStartRequest;
-    private static long lastEndRequest;
-
-    // GPU service
-    private GPUInfoService gpuService;
-
     // List of information of last drop
-    private Map<String, GPUInfo> lastDrops = new HashMap<>();
-    private Map<String, LocalDateTime> lastNotifications = new HashMap<>();
+    private final Map<String, GPUInfo> lastDrops = new HashMap<>();
+    private final Map<String, LocalDateTime> lastNotifications = new HashMap<>();
 
     @Override
     public void run() {
@@ -63,7 +56,8 @@ public class Daemon implements Runnable {
         logger.info("In : ".concat(PropertyManager.getProperty(LOCALES)));
 
         // Service
-        gpuService = new GPUInfoService();
+        // GPU service
+        GPUInfoService gpuService = new GPUInfoService();
 
         // Initialize properties
         initProperties();
@@ -73,7 +67,8 @@ public class Daemon implements Runnable {
             while(PropertyManager.isLoaded()) {
 
                 // Begin of process
-                lastStartRequest = System.currentTimeMillis();
+                // Request timer variables
+                long lastStartRequest = System.currentTimeMillis();
 
                 // Loop on the notification services
                 for (NotificationChannel notificationChannel : NotificationManager.getListNotificationChannel()) {
@@ -106,7 +101,7 @@ public class Daemon implements Runnable {
                 }
 
                 // End of process
-                lastEndRequest = System.currentTimeMillis();
+                long lastEndRequest = System.currentTimeMillis();
 
                 logger.debug("Loop duration : ".concat(String.valueOf(lastEndRequest - lastStartRequest).concat("ms")));
 

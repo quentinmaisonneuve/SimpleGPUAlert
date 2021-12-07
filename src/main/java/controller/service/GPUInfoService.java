@@ -18,12 +18,14 @@ import model.GPUName;
  */
 public class GPUInfoService {
 
+    // Constant
+    public static final String NVIDIA_API_LINK = "NVIDIA_API_LINK";
 
     public List<GPUInfo> getListInfoGPU(Locale locale) {
 
         List<GPUInfo> gpuInfos = new ArrayList<>();
         Map<String, GPUName> GPUNameToId = new HashMap<>();
-        String url = String.format(PropertyManager.getProperty("NVIDIA_API_LINK"),
+        String url = String.format(PropertyManager.getProperty(NVIDIA_API_LINK),
                 locale.toString().toUpperCase(),
                 locale.toString().toUpperCase());
 
