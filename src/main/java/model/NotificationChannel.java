@@ -7,7 +7,7 @@ import org.apache.maven.shared.utils.StringUtils;
 
 public enum NotificationChannel {
 
-    MAIL, TELEGRAM, WEB_REQUEST; // TODO : DISCORD, TWITTER, FACEBOOK, MESSENGER, DESKTOP;
+    DESKTOP, MAIL, TELEGRAM, WEB_REQUEST; // TODO : DISCORD, TWITTER, FACEBOOK, MESSENGER;
 
     /**
      * Convert a string name of notication channel to an enum NotificationChannel

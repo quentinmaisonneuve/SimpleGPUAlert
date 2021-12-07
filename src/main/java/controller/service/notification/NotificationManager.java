@@ -32,6 +32,7 @@ public class NotificationManager {
 
         switch (channel) {
 
+            case DESKTOP -> notificationService = new DesktopNotificationService();
             case MAIL -> notificationService = new MailNotificationService();
             case TELEGRAM -> notificationService = new TelegramNotificationService();
             case WEB_REQUEST -> notificationService = new WebRequestNotificationService();
@@ -40,12 +41,14 @@ public class NotificationManager {
 
         long delay = 0;
 
+        // If it's not the first notification on this channel
         if (lastNotificationMap.get(channel) != null) {
 
             Daemon.logger.debug("Last notification : ".concat(lastNotificationMap.get(channel).format(formatter)));
             Daemon.logger.debug("Now : ".concat(LocalDateTime.now().format(formatter)));
             Daemon.logger.debug("Difference : ".concat(String.valueOf(Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis())));
 
+            // Compute the delay based on the last notification time
             delay = getTimeoutNotificationChannel() * 1000 - Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis();
 
             if (Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis() > 0) {
