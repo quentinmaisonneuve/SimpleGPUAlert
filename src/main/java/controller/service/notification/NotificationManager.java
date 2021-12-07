@@ -20,6 +20,7 @@ public class NotificationManager {
     public static final String TIMEOUT_NOTIFICATION_CHANNEL = "TIMEOUT_NOTIFICATION_CHANNEL";
     public static final String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static final int MILLIS_TO_NANO = 1000000;
 
     private static List<NotificationChannel> listNotificationChannel;
     private static final Map<NotificationChannel, LocalDateTime> lastNotificationMap = new HashMap<>();
@@ -42,34 +43,39 @@ public class NotificationManager {
         long delay = 0;
 
         // If it's not the first notification on this channel
-        if (lastNotificationMap.get(channel) != null) {
+        if (getTimeoutNotificationChannel() > 0) {
 
-            Daemon.logger.debug("Last notification : ".concat(lastNotificationMap.get(channel).format(formatter)));
-            Daemon.logger.debug("Now : ".concat(LocalDateTime.now().format(formatter)));
-            Daemon.logger.debug("Difference : ".concat(String.valueOf(Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis())));
+            if (lastNotificationMap.get(channel) != null) {
 
-            // Compute the delay based on the last notification time
-            delay = getTimeoutNotificationChannel() * 1000 - Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis();
+                Daemon.logger.debug("Last notification : ".concat(lastNotificationMap.get(channel).format(formatter)));
+                Daemon.logger.debug("Now (millis) : ".concat(LocalDateTime.now().format(formatter)));
+                Daemon.logger.debug("Difference (millis) : ".concat(String.valueOf(Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis())));
 
-            if (Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis() > 0) {
+                // Compute the delay based on the last notification time
+                delay = getTimeoutNotificationChannel() - Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis();
 
-                lastNotificationMap.put(channel, LocalDateTime.now().plusNanos(delay * 1000000));
+                // If the last notification is before "now"
+                if (Duration.between(lastNotificationMap.get(channel), LocalDateTime.now()).toMillis() > 0) {
+
+                    lastNotificationMap.put(channel, LocalDateTime.now().plusNanos(delay * MILLIS_TO_NANO));
+
+                // If the last notification is after "now"
+                } else {
+
+                    lastNotificationMap.put(channel, lastNotificationMap.get(channel).plusNanos(getTimeoutNotificationChannel() * MILLIS_TO_NANO));
+                }
 
             } else {
 
-                lastNotificationMap.put(channel, lastNotificationMap.get(channel).plusSeconds(getTimeoutNotificationChannel()));
+                lastNotificationMap.put(channel, LocalDateTime.now());
             }
-
-        } else {
-
-            lastNotificationMap.put(channel, LocalDateTime.now());
         }
 
         // Setup the thread
         NotificationService finalNotificationService = notificationService;
         executor.schedule(() -> finalNotificationService.sendNotification(gpuInfo), delay, TimeUnit.MILLISECONDS);
 
-        Daemon.logger.debug("Delay : ".concat(String.valueOf(delay)));
+        Daemon.logger.debug("Delay (millis) : ".concat(String.valueOf(delay)));
     }
 
     public static List<NotificationChannel> getListNotificationChannel() {

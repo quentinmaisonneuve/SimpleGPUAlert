@@ -46,9 +46,12 @@ public class Daemon implements Runnable {
     private static long lastStartRequest;
     private static long lastEndRequest;
 
+    // GPU service
+    private GPUInfoService gpuService;
+
     // List of information of last drop
-    private Map<String, GPUInfo> lastDrops;
-    private Map<String, LocalDateTime> lastNotifications;
+    private Map<String, GPUInfo> lastDrops = new HashMap<>();
+    private Map<String, LocalDateTime> lastNotifications = new HashMap<>();
 
     @Override
     public void run() {
@@ -59,22 +62,15 @@ public class Daemon implements Runnable {
         logger.info("Searching GPUs : ".concat(PropertyManager.getProperty(GPU)));
         logger.info("In : ".concat(PropertyManager.getProperty(LOCALES)));
 
-        // Services
-        GPUInfoService gpuService = new GPUInfoService();
-        List<NotificationChannel> listNotificationChannel = NotificationManager.getListNotificationChannel();
+        // Service
+        gpuService = new GPUInfoService();
 
         // Initialize properties
         initProperties();
 
-        // Last drop / notifications
-        lastNotifications = new HashMap<>();
-        lastDrops = new HashMap<>();
-
-        boolean runDaemon = PropertyManager.isLoaded();
-
         try {
 
-            while(runDaemon) {
+            while(PropertyManager.isLoaded()) {
 
                 long timeToWait = refreshInterval - (lastEndRequest - lastStartRequest);
 
@@ -90,7 +86,7 @@ public class Daemon implements Runnable {
 
 
                 // Loop on the notification services
-                for (NotificationChannel notificationChannel : listNotificationChannel) {
+                for (NotificationChannel notificationChannel : NotificationManager.getListNotificationChannel()) {
 
                     // Loop on the locales
                     for (String locale : locales) {
