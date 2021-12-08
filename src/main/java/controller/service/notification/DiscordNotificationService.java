@@ -1,12 +1,16 @@
 package controller.service.notification;
 
-import controller.service.PropertyManager;
-import discord4j.common.util.Snowflake;
-import discord4j.core.DiscordClient;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.MessageChannel;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.Flow;
+
+import controller.Daemon;
 import model.GPUInfo;
 
 public class DiscordNotificationService implements NotificationService {
@@ -17,25 +21,29 @@ public class DiscordNotificationService implements NotificationService {
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
-        final DiscordClient client = DiscordClient.create(PropertyManager.getProperty(DISCORD_TOKEN));
+        try {
 
-        final GatewayDiscordClient gateway = client.login().block();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://discord.com/api/v9/channels/00/messages"))
+                    .header("Authorization", "Bot 00")
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"tts\":false,\"embeds\":[{\"title\":\"Hello, Embed!\",\"description\":\"This is an embedded message.\"}]}"))
+                    .build();
 
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        client.getChannelById(Snowflake.of("ChannelId"))
-                .ofType(MessageChannel.class)
-                .flatMap(channel -> channel.createMessage("Your content here"))
-                .subscribe();
-        /*gateway.getChan
+            Daemon.logger.info("Status code : ".concat(String.valueOf(response.statusCode())));
+            Daemon.logger.debug("Body : ".concat(response.body()));
 
-        gateway.on(MessageCreateEvent.class).subscribe(event -> {
-            final Message message = event.getMessage();
-            if ("!ping".equals(message.getContent())) {
-                final MessageChannel channel = message.getChannel().block();
-                channel.createMessage("Pong!").block();
+            if (!(200 <= response.statusCode() && response.statusCode() <= 206)) {
+
+                Daemon.logger.warn("The status code is not 2XX");
             }
-        });*/
 
-        gateway.onDisconnect().block();
+        } catch (Exception e) {
+
+            Daemon.logger.error(e);
+        }
     }
 }

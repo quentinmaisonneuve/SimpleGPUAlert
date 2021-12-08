@@ -32,7 +32,7 @@ public class WebRequestNotificationService implements NotificationService {
 
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             Daemon.logger.info("Status code : ".concat(String.valueOf(response.statusCode())));
-            Daemon.logger.info("Body : ".concat(response.body()));
+            Daemon.logger.debug("Body : ".concat(response.body()));
 
             if (!(200 <= response.statusCode() && response.statusCode() <= 206)) {
 
