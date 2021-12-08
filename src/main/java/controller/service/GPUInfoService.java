@@ -46,8 +46,8 @@ public class GPUInfoService {
 
                 GPUInfo gpuInfo = new GPUInfo();
 
-                gpuInfo.setIdGPU(jsonLineItem.getString("fe_sku").replace("_".concat(locale.toString().toUpperCase()), ""));
-                gpuInfo.setGpuName(GPUNameToId.get(gpuInfo.getIdGPU()));
+                gpuInfo.setGpuId(jsonLineItem.getString("fe_sku").replace("_".concat(locale.toString().toUpperCase()), ""));
+                gpuInfo.setGpuName(GPUNameToId.get(gpuInfo.getGpuId()));
                 gpuInfo.setActive(Boolean.parseBoolean(jsonLineItem.getString("is_active")));
                 gpuInfo.setProductUrl(jsonLineItem.getString("product_url"));
                 gpuInfo.setPrice(Double.parseDouble(jsonLineItem.getString("price")));

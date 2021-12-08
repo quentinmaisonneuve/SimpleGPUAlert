@@ -92,11 +92,12 @@ public class NotificationManager {
 
     protected static String formatString(String message, GPUInfo gpuInfo, boolean isURL) {
 
-        String formattedMessage = message.replace("%i", gpuInfo.getIdGPU())
+        String formattedMessage = message.replace("%i", gpuInfo.getGpuId())
                 .replace("%g", gpuInfo.getGpuName().toString())
                 .replace("%p", gpuInfo.getProductUrl())
                 .replace("%l", gpuInfo.getLocale().toString().toUpperCase())
-                .replace("%b", String.valueOf(gpuInfo.getPrice()));
+                .replace("%b", String.valueOf(gpuInfo.getPrice())
+                        .concat(gpuInfo.getLocale().toString().equalsIgnoreCase("uk")?"£":"€"));
 
         if (isURL) {
 

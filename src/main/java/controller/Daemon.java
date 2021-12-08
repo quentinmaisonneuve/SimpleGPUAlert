@@ -25,7 +25,7 @@ public class Daemon implements Runnable {
 
     // Constants
     public static final String REFRESH_INTERVAL = "REFRESH_INTERVAL";
-    public static final String LOCALES = "LOCALES";
+    public static final String LOCALE = "LOCALE";
     public static final String SEPARATOR = ",";
     public static final String GPU = "GPU";
     public static final String TIMEOUT_NOTIFICATION_DROP = "TIMEOUT_NOTIFICATION_DROP";
@@ -53,7 +53,8 @@ public class Daemon implements Runnable {
 
         logger.info("SimpleGPUAlert");
         logger.info("Searching GPUs : ".concat(PropertyManager.getProperty(GPU)));
-        logger.info("In : ".concat(PropertyManager.getProperty(LOCALES)));
+        logger.info("In : ".concat(PropertyManager.getProperty(LOCALE)));
+        logger.info("Sending messages to : ".concat(PropertyManager.getProperty(NotificationManager.NOTIFICATION_CHANNEL)));
 
         // Service
         // GPU service
@@ -134,7 +135,7 @@ public class Daemon implements Runnable {
                 .toList();
 
         // Get the locales
-        locales = PropertyManager.getProperty(LOCALES).split(SEPARATOR);
+        locales = PropertyManager.getProperty(LOCALE).split(SEPARATOR);
 
         // Timeout notification
         timeoutNotification = Long.parseLong(PropertyManager.getProperty(TIMEOUT_NOTIFICATION_DROP));
