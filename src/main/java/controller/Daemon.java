@@ -71,15 +71,15 @@ public class Daemon implements Runnable {
                 // Request timer variables
                 long lastStartRequest = System.currentTimeMillis();
 
-                // Loop on the notification services
-                for (NotificationChannel notificationChannel : NotificationManager.getListNotificationChannel()) {
+                // Loop on the locales
+                for (String locale : locales) {
 
-                    // Loop on the locales
-                    for (String locale : locales) {
+                    if (StringUtils.isNotBlank(locale)) {
 
-                        if (StringUtils.isNotBlank(locale)) {
+                        List<GPUInfo> gpuInfos = gpuService.getListInfoGPU(new Locale(locale.trim()));
 
-                            List<GPUInfo> gpuInfos = gpuService.getListInfoGPU(new Locale(locale.trim()));
+                        // Loop on the notification services
+                        for (NotificationChannel notificationChannel : NotificationManager.getListNotificationChannel()) {
 
                             // Loop on the infos of the GPUs
                             for (GPUInfo gpuInfo : gpuInfos) {

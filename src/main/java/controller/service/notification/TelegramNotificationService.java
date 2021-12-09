@@ -27,7 +27,7 @@ public class TelegramNotificationService implements NotificationService {
                 PropertyManager.getProperty(CHAT_ID),
                 PropertyManager.getProperty(TELEGRAM_MESSAGE_TEMPLATE));
 
-        JSONObject response = JSONManager.readJsonFromUrl(NotificationManager.formatString(PropertyManager.getProperty(url), gpuInfo, true));
+        JSONObject response = JSONManager.readJsonFromUrl(NotificationManager.formatString(url, gpuInfo, true));
 
         if ((Boolean) response.get("ok")) {
 
