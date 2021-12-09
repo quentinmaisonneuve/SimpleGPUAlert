@@ -44,7 +44,7 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 
 If you want you can reward my work with a donation
 
-### [Paypal](paypal.me/quentinmaisonneuve) 
+### [Paypal](https://www.paypal.me/quentinmaisonneuve) 
 
 ### Crypto currencies
 
