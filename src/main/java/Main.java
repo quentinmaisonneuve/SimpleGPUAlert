@@ -6,7 +6,6 @@ public class Main {
     // TODO :
     //  Before public repo : docker, readme/wiki
     //  Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
-    //  Add POST/PUT configuration for web request notification
     //  Expose API REST with last data
 
     public static void main(String[] args) {

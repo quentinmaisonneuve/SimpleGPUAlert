@@ -15,9 +15,9 @@ public enum GPUName {
     _3090;
 
     /**
-     * Convert a string name of Data.GPU to an enum Data.GPU
-     * @param gpuName Name of Data.GPU
-     * @return Enum of corresponding Data.GPU
+     * Convert a string name of GPU to an enum GPUName
+     * @param gpuName Name of GPU
+     * @return Enum of corresponding GPUName
      */
     public static GPUName StringToGPU(String gpuName) {
 
@@ -27,7 +27,7 @@ public enum GPUName {
 
             for (GPUName g : GPUName.values()) {
 
-                if (gpuName.trim().toLowerCase().equals(g.toString())) {
+                if (gpuName.trim().equalsIgnoreCase(g.toString())) {
 
                     gpu = g;
                     break;

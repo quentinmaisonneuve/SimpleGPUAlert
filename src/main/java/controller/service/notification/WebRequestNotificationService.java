@@ -9,11 +9,14 @@ import java.net.http.HttpResponse;
 import controller.Daemon;
 import controller.service.PropertyManager;
 import model.GPUInfo;
+import model.HttpRequestType;
 
 public class WebRequestNotificationService implements NotificationService {
 
-    // Constant
+    // Constants
     public static final String URL_TO_CALL = "URL_TO_CALL";
+    public static final String REQUEST_TYPE = "REQUEST_TYPE";
+    public static final String REQUEST_BODY = "REQUEST_BODY";
 
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
@@ -22,11 +25,34 @@ public class WebRequestNotificationService implements NotificationService {
 
         try {
 
+            HttpRequestType httpRequestType = HttpRequestType.StringToHttpRequestType(PropertyManager.getProperty(REQUEST_TYPE));
+            String requestBody = null;
+
+            if (httpRequestType == null) {
+
+                httpRequestType = HttpRequestType.GET;
+            }
+
+            if (httpRequestType.equals(HttpRequestType.POST) || httpRequestType.equals(HttpRequestType.PUT)) {
+
+                requestBody = NotificationManager.formatString(PropertyManager.getProperty(REQUEST_BODY), gpuInfo, false);
+
+                if (requestBody == null) {
+
+                    requestBody = "";
+                }
+            }
+
             HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
+            HttpRequest request = null;
+
+            switch (httpRequestType) {
+
+                case GET -> request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+                case PUT -> request = HttpRequest.newBuilder().uri(URI.create(url)).PUT(HttpRequest.BodyPublishers.ofString(requestBody)).build();
+                case POST -> request = HttpRequest.newBuilder().uri(URI.create(url)).POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
+                default -> {}
+            }
 
             HttpResponse<String> response;
 
