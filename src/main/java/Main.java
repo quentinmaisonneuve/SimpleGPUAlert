@@ -5,9 +5,9 @@ public class Main {
 
     // TODO :
     //  Before public repo : docker, readme/wiki
-    //  Make DISCORD, TWITTER, FACEBOOK, MESSENGER, WHATSAPP notifications
-    //  Optional :
-    //      Expose API REST with last data
+    //  Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
+    //  Add POST/PUT configuration for web request notification
+    //  Expose API REST with last data
 
     public static void main(String[] args) {
 

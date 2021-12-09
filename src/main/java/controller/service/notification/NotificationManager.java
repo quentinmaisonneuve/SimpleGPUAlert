@@ -37,6 +37,7 @@ public class NotificationManager {
             case DISCORD -> notificationService = new DiscordNotificationService();
             case MAIL -> notificationService = new MailNotificationService();
             case TELEGRAM -> notificationService = new TelegramNotificationService();
+            case TWITTER -> notificationService = new TwitterNotificationService();
             case WEB_REQUEST -> notificationService = new WebRequestNotificationService();
             default -> {}
         }

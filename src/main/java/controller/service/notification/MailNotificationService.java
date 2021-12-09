@@ -71,8 +71,6 @@ public class MailNotificationService implements NotificationService {
             // Set Subject
             message.setSubject(NotificationManager.formatString(PropertyManager.getProperty(MAIL_SUBJECT_TEMPLATE), gpuInfo, false));
 
-
-
             // Put the content of your message
             message.setText(NotificationManager.formatString(PropertyManager.getProperty(MAIL_MESSAGE_TEMPLATE), gpuInfo, false));
 

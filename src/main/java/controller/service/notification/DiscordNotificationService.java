@@ -5,6 +5,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -34,7 +35,7 @@ public class DiscordNotificationService implements NotificationService {
             embed.setTitle(NotificationManager.formatString(PropertyManager.getProperty(DISCORD_TITLE_TEMPLATE), gpuInfo, false));
             embed.setUrl(gpuInfo.getProductUrl());
             embed.setDescription(NotificationManager.formatString(PropertyManager.getProperty(DISCORD_MESSAGE_TEMPLATE), gpuInfo, false));
-            discordMessage.setEmbeds(Arrays.asList(embed));
+            discordMessage.setEmbeds(List.of(embed));
 
             // Request
             HttpClient client = HttpClient.newHttpClient();
