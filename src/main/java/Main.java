@@ -4,7 +4,7 @@ import controller.service.PropertyManager;
 public class Main {
 
     // TODO :
-    //  Before public repo : docker, readme/wiki
+    //  Before public repo : docker
     //  Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
     //  Expose API REST with last data
 
