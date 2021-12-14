@@ -44,6 +44,8 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 
 Before public repo : docker
 
+Keep only x days of log
+
 Adding header for WEB_REQUEST notification
 
 Make EXECUTE_COMMAND, INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
