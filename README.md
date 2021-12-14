@@ -40,6 +40,16 @@ You can find an example (with explanation) of a configuration file [here](src/ma
 
 If you find a bug don't hesitate to post an issue, I will try to fix it as soon as possible
 
+## TODO
+
+Before public repo : docker
+
+Adding header for WEB_REQUEST notification
+
+Make EXECUTE_COMMAND, INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
+
+Expose API REST with last data
+
 ## Donation
 
 If you want you can reward my work with a donation
