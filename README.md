@@ -46,8 +46,6 @@ Before public repo : docker
 
 Keep only x days of log
 
-Adding header for WEB_REQUEST notification
-
 Make EXECUTE_COMMAND, INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
 
 Expose API REST with last data

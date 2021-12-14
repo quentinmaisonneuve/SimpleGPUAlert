@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 
 import controller.Daemon;
 import controller.service.PropertyManager;
@@ -16,6 +17,7 @@ public class WebRequestNotificationService implements NotificationService {
     // Constants
     public static final String URL_TO_CALL = "URL_TO_CALL";
     public static final String REQUEST_TYPE = "REQUEST_TYPE";
+    public static final String HEADERS = "HEADERS";
     public static final String REQUEST_BODY = "REQUEST_BODY";
 
     @Override
@@ -44,19 +46,26 @@ public class WebRequestNotificationService implements NotificationService {
             }
 
             HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = null;
 
+            // Creating builder of request with url and headers
+            HttpRequest.Builder builder = HttpRequest
+                    .newBuilder()
+                    .uri(URI.create(url))
+                    .headers(Arrays.stream(PropertyManager.getProperty(HEADERS).split(","))
+                            .map(String::trim)
+                            .toArray(String[]::new));
+
+            // Setting the request method
             switch (httpRequestType) {
 
-                case GET -> request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-                case PUT -> request = HttpRequest.newBuilder().uri(URI.create(url)).PUT(HttpRequest.BodyPublishers.ofString(requestBody)).build();
-                case POST -> request = HttpRequest.newBuilder().uri(URI.create(url)).POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
+                case GET -> builder = builder.GET();
+                case PUT -> builder = builder.PUT(HttpRequest.BodyPublishers.ofString(requestBody));
+                case POST -> builder = builder.POST(HttpRequest.BodyPublishers.ofString(requestBody));
                 default -> {}
             }
 
-            HttpResponse<String> response;
+            HttpResponse<String> response = client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
 
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
             Daemon.logger.info("Status code : ".concat(String.valueOf(response.statusCode())));
             Daemon.logger.debug("Body : ".concat(response.body()));
 
@@ -67,8 +76,9 @@ public class WebRequestNotificationService implements NotificationService {
 
         } catch (IllegalArgumentException e) {
 
-            Daemon.logger.error("Bad url");
+            Daemon.logger.error("Bad url or headers");
             Daemon.logger.error("URL : ".concat(url));
+            Daemon.logger.error("HEADERS : ".concat(PropertyManager.getProperty(HEADERS)));
 
         } catch (IOException | InterruptedException e) {
 
