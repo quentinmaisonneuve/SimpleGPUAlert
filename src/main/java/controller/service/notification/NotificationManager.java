@@ -33,6 +33,7 @@ public class NotificationManager {
 
         switch (channel) {
 
+            case COMMAND -> notificationService = new CommandService();
             case DESKTOP -> notificationService = new DesktopNotificationService();
             case DISCORD -> notificationService = new DiscordNotificationService();
             case MAIL -> notificationService = new MailNotificationService();
