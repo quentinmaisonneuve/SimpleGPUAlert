@@ -46,7 +46,7 @@ Before public repo : docker
 
 Keep only x days of log
 
-Make EXECUTE_COMMAND, INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
+Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
 
 Expose API REST with last data
 
