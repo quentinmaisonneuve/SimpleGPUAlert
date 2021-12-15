@@ -43,13 +43,9 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 
 ## TODO
 
-Before public repo : docker
-
-Keep only x days of log
-
-Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
-
-Expose API REST with last data
+- Before public repo : docker
+- Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
+- Expose API REST with last data
 
 ## Donation
 

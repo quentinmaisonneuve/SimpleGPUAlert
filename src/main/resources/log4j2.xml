@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
+        <RollingFile name="RollingFile" fileName="SimpleGPUAlert.log"
+                     filePattern="SimpleGPUAlert-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level (%C{1}) - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="20MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%-5level}{FATAL=black, ERROR=red, WARN=blue, INFO=white, DEBUG=green, TRACE=blue} (%C{1}) - %msg%n" disableAnsi="false"/>
         </Console>
-        <File name="fout" fileName="SimpleGPUAlert.log" append="true">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level (%C{1}) - %msg%n"/>
-        </File>
     </Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="fout"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
     </Loggers>
 </Configuration>
