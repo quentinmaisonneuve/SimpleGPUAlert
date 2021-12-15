@@ -7,8 +7,9 @@ The purpose of SimpleGPUAlert is to notification people when there is a Nvidia R
 ## Quick links where the bot is already running
 launched the 09/12/2021
 
-- Twitter page  : https://twitter.com/SimpleGPUAlert
+- Discord Server : https://discord.gg/mN7fT3fgyZ
 - Telegram channel : https://t.me/SimpleGPUAlert
+- Twitter page  : https://twitter.com/SimpleGPUAlert
 
 ## Requirements
 
