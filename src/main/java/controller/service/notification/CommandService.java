@@ -7,48 +7,44 @@ import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 public class CommandService implements NotificationService {
 
     // Constants
     public static final String COMMAND = "COMMAND";
-    public static final String SHELL = "SHELL";
+    public static final String ENV_VAR = "ENV_VAR";
+    public static final String DIRECTORY = "DIRECTORY";
 
     @Override
     public void sendNotification(GPUInfo gpuInfo) {
 
-        boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-        String shell;
-        String homeDirectory;
-        String commandToExecute;
+        String[] envVar = null;
+        String directory;
         Process process;
 
-        if (StringUtils.isNotBlank(PropertyManager.getProperty(SHELL))) {
+        if (StringUtils.isNotBlank(PropertyManager.getProperty(ENV_VAR))) {
 
-            shell = PropertyManager.getProperty(SHELL);
+            envVar = PropertyManager.getProperty(ENV_VAR).split(",");
+        }
+
+        if (StringUtils.isNotBlank(PropertyManager.getProperty(DIRECTORY))) {
+
+            directory = PropertyManager.getProperty(DIRECTORY);
 
         } else {
 
-            if (isWindows) {
-
-                shell = "cmd.exe";
-
-            } else {
-
-                shell = "sh";
-            }
+            directory = System.getProperty("user.home");
         }
 
         try {
 
-            commandToExecute = String.format("%s /c %s",
-                    shell,
-                    PropertyManager.getProperty(COMMAND));
+            process = Runtime.getRuntime().exec(PropertyManager.getProperty(COMMAND),
+                    envVar,
+                    new File(directory));
 
-             process = Runtime.getRuntime().exec(commandToExecute);
-
-            Daemon.logger.info("Command : ".concat(commandToExecute));
+            Daemon.logger.info("Command : ".concat(PropertyManager.getProperty(COMMAND)));
+            Daemon.logger.info("Environment variable(s) : ".concat(PropertyManager.getProperty(COMMAND)));
+            Daemon.logger.info("Directory : ".concat(directory));
             Daemon.logger.info("Command result :");
             Daemon.logger.info(new String(IOUtils.toByteArray(process.getInputStream())));
 
