@@ -72,6 +72,7 @@ public class WebRequestNotificationService implements NotificationService {
             if (!(200 <= response.statusCode() && response.statusCode() <= 206)) {
 
                 Daemon.logger.warn("The status code is not 2XX");
+                Daemon.logger.warn("Body : ".concat(response.body()));
             }
 
         } catch (IllegalArgumentException e) {

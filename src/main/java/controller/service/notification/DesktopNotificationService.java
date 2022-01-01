@@ -47,6 +47,8 @@ public class DesktopNotificationService implements NotificationService {
                     NotificationManager.formatString(PropertyManager.getProperty(DESKTOP_MESSAGE_TEMPLATE), gpuInfo, false),
                     TrayIcon.MessageType.INFO);
 
+            Daemon.logger.info("Desktop message sent successfully");
+
         } catch(Exception e) {
 
             Daemon.logger.error(e);

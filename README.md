@@ -31,7 +31,8 @@ Note : you can also start it like that `java -jar SimpleGPUAlert.jar` but you wi
 
 ### Docker
 
-Work in progress...
+Command to use when you are in the target directory :
+`docker build -t simplegpualert:0.1 -f ../src/main/resources/Dockerfile .`
 
 ## Configuration
 

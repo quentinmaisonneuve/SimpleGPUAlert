@@ -32,6 +32,7 @@ public class TwitterNotificationService implements NotificationService {
         try {
 
             twitter.updateStatus(NotificationManager.formatString(PropertyManager.getProperty(TWEET_TEMPLATE), gpuInfo, false));
+            Daemon.logger.info("Tweet sent successfully");
 
         } catch (TwitterException e) {
 
