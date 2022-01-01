@@ -5,7 +5,7 @@
 The purpose of SimpleGPUAlert is to notification people when there is a Nvidia RTX 3000 series drop using several notification channel such as Telegram or Discord.
 
 ## Quick links where the bot is already running
-launched the 09/12/2021
+launched the 01/01/2022
 
 - Discord Server : https://discord.gg/P9zFecmYw8
 - Telegram channel : https://t.me/SimpleGPUAlert
