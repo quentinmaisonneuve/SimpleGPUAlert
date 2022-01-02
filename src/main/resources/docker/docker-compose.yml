@@ -1,0 +1,7 @@
+services:
+  simple-gpu-alert:
+    image: quentinmaisonneuve/simplegpualert:{tag}
+    volumes:
+      - {local_path_to_configuration.properties}:/app/simple-gpu-alert/configuration.properties
+      - {local_path_to_log_folder}:/app/simple-gpu-alert/log
+    restart: always
