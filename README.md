@@ -56,6 +56,7 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 
 ## Coming soon
 
+- Link locale with discord channel independently 
 - Expose API REST with last data
 
 ## Donation
