@@ -54,10 +54,8 @@ You can find an example (with explanation) of a configuration file [here](src/ma
 
 If you find a bug don't hesitate to post an issue, I will try to fix it as soon as possible
 
-## TODO
+## Coming soon
 
-- Before public repo : docker
-- Make INSTAGRAM, FACEBOOK, MESSENGER, WHATSAPP notifications
 - Expose API REST with last data
 
 ## Donation
