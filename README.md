@@ -21,7 +21,7 @@ If you want to use Discord, Telegram or Twitter to send the notification, you ne
 
 ### Manual installation
 
-To use SimpleGPUAlert you can download the jar [here]() or compile it your self with this maven command :
+To use SimpleGPUAlert you can download the jar [here](https://mega.nz/file/vQsRmAxJ#GSVUiYYkWKBQODW6DFXu4Te1LY-U62Ccnt__x7z9YfM) or compile it your self with this maven command :
 `mvn clean compile assembly:single`
 
 Once it's done open a command prompt and type :
