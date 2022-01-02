@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The purpose of SimpleGPUAlert is to notification people when there is a Nvidia RTX 3000 series drop using several notification channel such as Telegram or Discord.
+The purpose of SimpleGPUAlert is to notification people when there is an Nvidia RTX 3000 series drop using several notification channel such as Telegram or Discord.
 
 ## Quick links where the bot is already running
 launched the 01/01/2022
@@ -21,7 +21,7 @@ If you want to use Discord, Telegram or Twitter to send the notification, you ne
 
 ### Manual installation
 
-To use SimpleGPUAlert you can download the jar [here]() or compile it your self with this maven commande :
+To use SimpleGPUAlert you can download the jar [here]() or compile it your self with this maven command :
 `mvn clean compile assembly:single`
 
 Once it's done open a command prompt and type :
@@ -31,8 +31,20 @@ Note : you can also start it like that `java -jar SimpleGPUAlert.jar` but you wi
 
 ### Docker
 
-Command to use when you are in the target directory :
-`docker build -t simplegpualert:0.1 -f ../src/main/resources/Dockerfile .`
+A docker repository is available [here](https://hub.docker.com/repository/docker/quentinmaisonneuve/simplegpualert)
+
+#### Using docker run
+
+Run this command :
+
+`docker run -v {local_path_to_configuration.properties}:/app/simple-gpu-alert/configuration.properties 
+    -v {local_path_to_log_folder}:/app/simple-gpu-alert/log 
+    quentinmaisonneuve/simplegpualert:{tag}`
+
+#### Using docker compose
+
+Edit the [docker compose yaml file](src/main/resources/docker/docker-compose.yml) and run this command :
+`docker compose up -d`
 
 ## Configuration
 
