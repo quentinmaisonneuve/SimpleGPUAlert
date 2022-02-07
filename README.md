@@ -67,6 +67,7 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 ## Coming soon
 
 - Add date on logs
+- Fix rolling files logs
 - Remove Thread.sleep()
 - Link locale / GPU with different channel configuration 
 - Expose API REST with last data
