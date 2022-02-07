@@ -63,9 +63,9 @@ public class Daemon implements Runnable {
         // Initialize properties
         initProperties();
 
-        try {
+        while(PropertyManager.isLoaded()) {
 
-            while(PropertyManager.isLoaded()) {
+            try {
 
                 // Begin of process
                 // Request timer variables
@@ -113,11 +113,11 @@ public class Daemon implements Runnable {
 
                     Thread.sleep(timeToWait);
                 }
+
+            } catch (Exception e) {
+
+                Daemon.logger.error(e);
             }
-
-        } catch (Exception e) {
-
-            Daemon.logger.error(e);
         }
     }
 

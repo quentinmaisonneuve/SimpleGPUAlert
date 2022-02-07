@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import controller.Daemon;
@@ -35,26 +36,36 @@ public class GPUInfoService {
         }
 
         Daemon.logger.info("Request on : ".concat(url));
+        JSONObject readJSON = JSONManager.readJsonFromUrl(url);
 
-        JSONArray lineProducts = JSONManager.readJsonFromUrl(url).getJSONArray("listMap");
+        try {
 
-        for (Object o : lineProducts) {
+            JSONArray lineProducts = readJSON.getJSONArray("listMap");
 
-            JSONObject jsonLineItem = (JSONObject) o;
+            for (Object o : lineProducts) {
 
-            if (jsonLineItem.getString("fe_sku").startsWith("NVGFT")) {
+                JSONObject jsonLineItem = (JSONObject) o;
 
-                GPUInfo gpuInfo = new GPUInfo();
+                if (jsonLineItem.getString("fe_sku").startsWith("NVGFT")) {
 
-                gpuInfo.setGpuId(jsonLineItem.getString("fe_sku").replace("_".concat(locale.toString().toUpperCase()), ""));
-                gpuInfo.setGpuName(GPUNameToId.get(gpuInfo.getGpuId()));
-                gpuInfo.setActive(Boolean.parseBoolean(jsonLineItem.getString("is_active")));
-                gpuInfo.setProductUrl(jsonLineItem.getString("product_url"));
-                gpuInfo.setPrice(Double.parseDouble(jsonLineItem.getString("price")));
-                gpuInfo.setLocale(locale);
+                    GPUInfo gpuInfo = new GPUInfo();
 
-                gpuInfos.add(gpuInfo);
+                    gpuInfo.setGpuId(jsonLineItem.getString("fe_sku").replace("_".concat(locale.toString().toUpperCase()), ""));
+                    gpuInfo.setGpuName(GPUNameToId.get(gpuInfo.getGpuId()));
+                    gpuInfo.setActive(Boolean.parseBoolean(jsonLineItem.getString("is_active")));
+                    gpuInfo.setProductUrl(jsonLineItem.getString("product_url"));
+                    gpuInfo.setPrice(Double.parseDouble(jsonLineItem.getString("price")));
+                    gpuInfo.setLocale(locale);
+
+                    gpuInfos.add(gpuInfo);
+                }
             }
+
+        } catch (JSONException e) {
+
+            Daemon.logger.error("Error while parsing GPU information from JSON : ".concat(url));
+            Daemon.logger.error(e);
+            Daemon.logger.error(readJSON.toString());
         }
 
         return gpuInfos;
