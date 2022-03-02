@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <RollingFile name="RollingFile" fileName="log/SimpleGPUAlert.log"
-                     filePattern="SimpleGPUAlert-%d{dd-MM-yyyy}-%i.log.gz">
+        <RollingFile name="rolling_log" fileName="log/SimpleGPUAlert.log"
+                     filePattern="log/SimpleGPUAlert-%d{dd-MM-yyyy}-%i.log.gz">
             <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} [%t] %-5level (%C{1}) - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy />
@@ -17,7 +17,7 @@
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="rolling_log"/>
         </Root>
     </Loggers>
 </Configuration>
