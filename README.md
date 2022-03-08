@@ -56,6 +56,12 @@ Run this command :
 Edit the [docker compose yaml file](src/main/resources/docker/docker-compose.yml) and run this command :
 `docker compose up -d`
 
+#### Create your own image
+
+Run this command at the root directory of the project after compiling (see above) :
+
+`docker build -t simplegpualert:{tag} -f ./target/docker/{architecture}/Dockerfile .`
+
 ## Configuration
 
 You can find an example (with explanation) of a configuration file [here](src/main/resources/configuration.properties)
