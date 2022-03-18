@@ -72,6 +72,7 @@ If you find a bug don't hesitate to post an issue, I will try to fix it as soon 
 
 ## Coming soon
 
+- Check if the link contains a real product page ;
 - Remove Thread.sleep()
 - Link locale / GPU with different channel configuration 
 - Expose API REST with last data
