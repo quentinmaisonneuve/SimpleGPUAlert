@@ -12,7 +12,8 @@ public enum GPUName {
     _3070ti,
     _3080,
     _3080ti,
-    _3090;
+    _3090,
+    _3090ti;
 
     /**
      * Convert a string name of GPU to an enum GPUName
