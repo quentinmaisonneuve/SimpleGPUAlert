@@ -37,6 +37,12 @@
 
         <resources>
             <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>log4j2.xml</include>
+                </includes>
+            </resource>
+            <resource>
                 <filtering>true</filtering>
                 <directory>${project.basedir}/src/main/resources/docker</directory>
                 <targetPath>${project.build.directory}/docker</targetPath>
